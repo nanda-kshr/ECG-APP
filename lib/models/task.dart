@@ -129,6 +129,8 @@ class Task {
 class PatientImage {
   final int imageId;
   final String imageName;
+  final String? imagePath;
+  final String? imageUrl;
   final String? comment;
   final DateTime? createdAt;
   final String? status;
@@ -136,6 +138,8 @@ class PatientImage {
   PatientImage({
     required this.imageId,
     required this.imageName,
+    this.imagePath,
+    this.imageUrl,
     this.comment,
     this.createdAt,
     this.status,
@@ -145,6 +149,8 @@ class PatientImage {
     return PatientImage(
       imageId: int.parse(json['image_id'].toString()),
       imageName: json['image_name']?.toString() ?? '',
+      imagePath: json['image_path']?.toString(),
+      imageUrl: json['image_url']?.toString(),
       comment: json['comment']?.toString(),
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'].toString())

@@ -1,4 +1,4 @@
-enum UserRole { technician, admin, doctor }
+enum UserRole { technician, admin, doctor, pg }
 
 class User {
   final int id;

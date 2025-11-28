@@ -64,11 +64,9 @@ class _LoginScreenState extends State<LoginScreen> {
       case UserRole.doctor:
         screen = const DoctorDashboard();
         break;
-      default:
-        setState(() {
-          _errorMessage = 'Unknown user role.';
-        });
-        return;
+      case UserRole.pg:
+        screen = const DoctorDashboard();
+        break;
     }
 
     Navigator.of(context).pushReplacement(

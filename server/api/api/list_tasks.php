@@ -18,6 +18,7 @@ try {
     $status = isset($_GET['status']) ? trim($_GET['status']) : null;
     $doctorId = isset($_GET['doctor_id']) ? (int)$_GET['doctor_id'] : null;
     $technicianId = isset($_GET['technician_id']) ? (int)$_GET['technician_id'] : null;
+    $pgId = isset($_GET['pg_id']) ? (int)$_GET['pg_id'] : null;
     $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 50;
     $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
 
@@ -37,6 +38,11 @@ try {
     if ($technicianId) {
         $where[] = 't.technician_id = :tid';
         $params['tid'] = $technicianId;
+    }
+
+    if ($pgId) {
+        $where[] = 't.assigned_pg_id = :pgid';
+        $params['pgid'] = $pgId;
     }
 
     $whereClause = !empty($where) ? 'WHERE ' . implode(' AND ', $where) : '';
@@ -88,6 +94,36 @@ try {
 
         $uniqueTasks[] = $task;
     }
+
+    // Build base URL for images using get_image.php API
+    $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') 
+               . '://' . $_SERVER['HTTP_HOST'];
+    $scriptPath = dirname($_SERVER['SCRIPT_NAME']); // e.g., /ecg_new/api
+
+    // Fetch images for each task's patient
+    foreach ($uniqueTasks as &$task) {
+        $task['patient_last_images'] = [];
+        if (!empty($task['patient_id'])) {
+            $imgStmt = $pdo->prepare(
+                'SELECT id as image_id, image_name, image_path, comment, created_at, status 
+                 FROM ecg_images 
+                 WHERE patient_id = :pid 
+                 ORDER BY created_at DESC 
+                 LIMIT 10'
+            );
+            $imgStmt->execute(['pid' => $task['patient_id']]);
+            $images = $imgStmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Add full image URL using get_image.php API
+            foreach ($images as &$img) {
+                $img['image_url'] = $baseUrl . $scriptPath . '/get_image.php?image_id=' . $img['image_id'] . '&download=1';
+            }
+            unset($img);
+            
+            $task['patient_last_images'] = $images;
+        }
+    }
+    unset($task); // Break reference
 
     echo json_encode(['success'=>true, 'tasks' => $uniqueTasks, 'count' => count($uniqueTasks)]);
 

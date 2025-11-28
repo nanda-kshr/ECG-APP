@@ -2982,6 +2982,90 @@
 			]
 		},
 		{
+			"name": "Images",
+			"item": [
+				{
+					"name": "Get Image by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/get_image.php?image_id=1&download=1",
+							"host": ["{{baseUrl}}"],
+							"path": ["get_image.php"],
+							"query": [
+								{ "key": "image_id", "value": "1" },
+								{ "key": "download", "value": "1" }
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Task Images",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/get_task_images.php?task_id={{taskId}}&limit=10&offset=0",
+							"host": ["{{baseUrl}}"],
+							"path": ["get_task_images.php"],
+							"query": [
+								{ "key": "task_id", "value": "{{taskId}}" },
+								{ "key": "limit", "value": "10" },
+								{ "key": "offset", "value": "0" }
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Task Images",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/get_task_images.php?task_id=1&limit=10&offset=0",
+									"host": ["{{baseUrl}}"],
+									"path": ["get_task_images.php"],
+									"query": [
+										{ "key": "task_id", "value": "1" },
+										{ "key": "limit", "value": "10" },
+										{ "key": "offset", "value": "0" }
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{ "key": "Content-Type", "value": "application/json; charset=utf-8" }
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"images\": [\n        {\n            \"image_id\": 1,\n            \"image_name\": \"ecg_scan.jpg\",\n            \"image_path\": \"uploads/ecg_images/PAT20251112001_1731412613_0.jpg\",\n            \"image_url\": \"http://localhost/ecg_new/api/get_image.php?image_id=1&download=1\",\n            \"comment\": null,\n            \"created_at\": \"2025-11-12 12:26:53\",\n            \"status\": \"pending\",\n            \"file_size\": 125000,\n            \"mime_type\": \"image/jpeg\"\n        }\n    ],\n    \"count\": 1,\n    \"total\": 1,\n    \"patient_id\": 1\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Patient Images",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/get_task_images.php?patient_id={{patientDbId}}&limit=10&offset=0",
+							"host": ["{{baseUrl}}"],
+							"path": ["get_task_images.php"],
+							"query": [
+								{ "key": "patient_id", "value": "{{patientDbId}}" },
+								{ "key": "limit", "value": "10" },
+								{ "key": "offset", "value": "0" }
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "PG",
 			"item": [
 				{
@@ -2993,24 +3077,85 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"PG User\",\n  \"email\": \"pg1@example.com\",\n  \"password\": \"pass12345\",\n  \"created_by\": {{doctorId}}\n}"
+							"raw": "{\n  \"doctor_id\": {{doctorId}},\n  \"name\": \"PG User\",\n  \"email\": \"pg1@example.com\",\n  \"password\": \"pass12345\"\n}"
 						},
-						"url": { "raw": "{{baseUrl}}/create_pg.php", "host": ["{{baseUrl}}"], "path": ["create_pg.php"] }
+						"url": { "raw": "{{baseUrl}}/pgs.php", "host": ["{{baseUrl}}"], "path": ["pgs.php"] }
 					},
 					"response": []
 				},
 				{
-					"name": "Doctor Assign PG",
+					"name": "List PGs",
 					"request": {
-						"method": "POST",
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/pgs.php?limit=50&offset=0",
+							"host": ["{{baseUrl}}"],
+							"path": ["pgs.php"],
+							"query": [
+								{ "key": "limit", "value": "50" },
+								{ "key": "offset", "value": "0" }
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Duty PGs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/pgs.php?duty=1",
+							"host": ["{{baseUrl}}"],
+							"path": ["pgs.php"],
+							"query": [{ "key": "duty", "value": "1" }]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update PG",
+					"request": {
+						"method": "PUT",
 						"header": [
 							{ "key": "Content-Type", "value": "application/json" }
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"task_id\": {{taskId}},\n  \"pg_id\": {{pgId}},\n  \"doctor_id\": {{doctorId}}\n}"
+							"raw": "{\n  \"doctor_id\": {{doctorId}},\n  \"id\": {{pgId}},\n  \"name\": \"PG Updated\"\n}"
 						},
-						"url": { "raw": "{{baseUrl}}/doctor_assign_pg.php", "host": ["{{baseUrl}}"], "path": ["doctor_assign_pg.php"] }
+						"url": { "raw": "{{baseUrl}}/pgs.php", "host": ["{{baseUrl}}"], "path": ["pgs.php"] }
+					},
+					"response": []
+				},
+				{
+					"name": "Set Duty PG",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"doctor_id\": {{doctorId}},\n  \"id\": {{pgId}},\n  \"set_duty\": 1\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/pgs.php", "host": ["{{baseUrl}}"], "path": ["pgs.php"] }
+					},
+					"response": []
+				},
+				{
+					"name": "Delete PG",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"doctor_id\": {{doctorId}},\n  \"id\": {{pgId}}\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/pgs.php", "host": ["{{baseUrl}}"], "path": ["pgs.php"] }
 					},
 					"response": []
 				}
@@ -3068,6 +3213,11 @@
 		{
 			"key": "taskId",
 			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "pgId",
+			"value": "4",
 			"type": "string"
 		}
 	]

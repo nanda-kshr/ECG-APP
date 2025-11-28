@@ -63,7 +63,7 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
   Widget build(BuildContext context) {
     final request = DummyData.getPatientRequest(widget.patient.id);
     final currentUser = AuthService.currentUser;
-    final isDoctor = currentUser?.role == UserRole.doctor;
+    final isDoctor = currentUser?.role == UserRole.doctor || currentUser?.role == UserRole.pg;
     final assignedDoctor = request?.assignedDoctorId != null
         ? DummyData.users.firstWhere(
             (user) => user.id == request!.assignedDoctorId,

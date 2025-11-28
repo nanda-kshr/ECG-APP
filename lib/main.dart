@@ -108,7 +108,7 @@ class _SplashScreenState extends State<SplashScreen> {
       case UserRole.admin:
         screen = const AdminDashboard();
         break;
-      case UserRole.doctor:
+      case UserRole.doctor || UserRole.pg:
         screen = const DoctorDashboard();
         break;
     }

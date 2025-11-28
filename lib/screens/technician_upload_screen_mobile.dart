@@ -192,13 +192,15 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
       setState(() {
         _isUploading = false;
         if (result['success'] == true) {
-          _successMessage =
-              'ECG uploaded and task auto-assigned to duty doctor. Task ID: ${result['task_id']}, Patient: ${_selectedPatient!.displayInfo}';
+          _successMessage = 'ECG uploaded';
           _notesController.clear();
           _selectedImages = [];
           _selectedPatient = null;
           _patientSearchController.clear();
           _selectedPriority = 'normal';
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          });
         } else {
           _errorMessage = result['error'] ?? 'Upload failed';
         }

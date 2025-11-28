@@ -85,7 +85,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
         return Icons.camera_alt;
       case UserRole.admin:
         return Icons.admin_panel_settings;
-      case UserRole.doctor:
+      case UserRole.doctor || UserRole.pg:
         return Icons.local_hospital;
     }
   }
@@ -96,7 +96,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
         return 'Clinic Doctor';
       case UserRole.admin:
         return 'Administrator';
-      case UserRole.doctor:
+      case UserRole.doctor || UserRole.pg:
         return 'Doctor';
     }
   }

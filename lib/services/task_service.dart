@@ -77,12 +77,13 @@ class TaskService {
 
   // Doctor: get tasks assigned to current duty doctor
   static Future<List<Task>> listDutyTasks(
-      {int? doctorId, String? status}) async {
+      {int? doctorId, int? pgId, String? status}) async {
     final queryParams = <String, String>{
       'limit': '50',
       'offset': '0',
       if (status != null) 'status': status,
       if (doctorId != null) 'doctor_id': doctorId.toString(),
+      if (pgId != null) 'pg_id': pgId.toString(),
     };
     final url = Uri.parse('${apiBase}list_tasks.php')
         .replace(queryParameters: queryParams);
