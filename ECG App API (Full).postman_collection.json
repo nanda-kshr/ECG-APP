@@ -1,0 +1,3074 @@
+{
+	"info": {
+		"_postman_id": "2a649271-1161-4279-983e-aa3587339f63",
+		"name": "ECG App API (Full)",
+		"description": "Postman collection covering all required ECG app APIs (technicians, doctors, duty management, patients, tasks).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44747720",
+		"_collection_link": "https://rahul-8020221.postman.co/workspace/Rahul's-Workspace~15efdaab-8105-4619-8dbf-ee442e9241cb/collection/44747720-2a649271-1161-4279-983e-aa3587339f63?action=share&source=collection_link&creator=44747720"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login Admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/login.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Login Admin",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/login.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"login.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:41:08 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "95"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"user\": {\n        \"id\": 1,\n        \"email\": \"admin@example.com\",\n        \"name\": \"Admin User\",\n        \"role\": \"admin\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/create_admin.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"create_admin.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Doctor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"dr@example.com\",\n  \"password\": \"docpass\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/login.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Login Doctor",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"dr@example.com\",\n  \"password\": \"docpass\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/login.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"login.php"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:41:28 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "47"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=99"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": false,\n    \"error\": \"Invalid credentials\"\n}"
+						},
+						{
+							"name": "Login Doctor",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"dr@example.com\",\n  \"password\": \"docpass\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/login.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"login.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:43:48 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "94"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=98"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"user\": {\n        \"id\": 8,\n        \"email\": \"dr@example.com\",\n        \"name\": \"Dr. Example\",\n        \"role\": \"doctor\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Login Technician",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"tech@example.com\",\n  \"password\": \"techpass\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/login.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Login Technician",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"tech1@example.com\",\n  \"password\": \"techpass\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/login.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"login.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:44:15 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "99"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"user\": {\n        \"id\": 11,\n        \"email\": \"tech1@example.com\",\n        \"name\": \"Tech One\",\n        \"role\": \"technician\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Register (Doctor/Technician)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"New dr\",\n  \"email\": \"newdr@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"doctor\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/register.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"register.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "technician response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"New Tech\",\n  \"email\": \"newtech@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"technician\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/register.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"register.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:44:40 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "28"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"userId\": 12\n}"
+						},
+						{
+							"name": "doctor ˇ",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"New dr\",\n  \"email\": \"newdr@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"doctor\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/register.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"register.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:44:53 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "28"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"userId\": 13\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Technicians",
+			"item": [
+				{
+					"name": "List Technicians",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/technicians.php?search=&limit=50&offset=0",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"technicians.php"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": ""
+								},
+								{
+									"key": "limit",
+									"value": "50"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "List Technicians",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/technicians.php?search=&limit=50&offset=0",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"technicians.php"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": ""
+										},
+										{
+											"key": "limit",
+											"value": "50"
+										},
+										{
+											"key": "offset",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:41:34 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "253"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"technicians\": [\n        {\n            \"id\": 6,\n            \"name\": \"Test User\",\n            \"email\": \"useer@example.com\",\n            \"role\": \"technician\",\n            \"created_at\": \"2025-11-12 11:06:48\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Test User\",\n            \"email\": \"user@example.com\",\n            \"role\": \"technician\",\n            \"created_at\": \"2025-11-12 10:58:23\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Technician",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/technicians.php?id={{technicianId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"technicians.php"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{technicianId}}"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Technician",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/technicians.php?id={{technicianId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"technicians.php"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "{{technicianId}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:42:32 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "140"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"technician\": {\n        \"id\": 6,\n        \"name\": \"Test User\",\n        \"email\": \"useer@example.com\",\n        \"role\": \"technician\",\n        \"created_at\": \"2025-11-12 11:06:48\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Technician",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"admin_id\": {{adminId}},\n  \"name\": \"Tech One\",\n  \"email\": \"tech1@example.com\",\n  \"password\": \"techpass\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/technicians.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"technicians.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Technician",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"admin_id\": {{adminId}},\n  \"name\": \"Tech One\",\n  \"email\": \"tech1@example.com\",\n  \"password\": \"techpass\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/technicians.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"technicians.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:42:41 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "35"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"technician_id\": 11\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Technician",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"admin_id\": {{adminId}},\n  \"id\": {{technicianId}},\n  \"name\": \"Tech One Updated\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/technicians.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"technicians.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Update Technician",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"admin_id\": {{adminId}},\n  \"id\": {{technicianId}},\n  \"name\": \"Tech One Updated\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/technicians.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"technicians.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:42:54 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "16"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Technician",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"admin_id\": {{adminId}},\n  \"id\": {{technicianId}}\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/technicians.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"technicians.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Delete Technician",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"admin_id\": {{adminId}},\n  \"id\": {{technicianId}}\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/technicians.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"technicians.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:43:00 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "16"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Doctors",
+			"item": [
+				{
+					"name": "List Doctors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/doctors.php?limit=50&offset=0",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"doctors.php"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "50"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "List Doctors",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/doctors.php?limit=50&offset=0",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"doctors.php"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "50"
+										},
+										{
+											"key": "offset",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:46:44 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "263"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"doctors\": [\n        {\n            \"id\": 8,\n            \"name\": \"Dr. Example\",\n            \"email\": \"dr@example.com\",\n            \"role\": \"doctor\",\n            \"is_duty\": 0,\n            \"created_at\": \"2025-11-12 11:07:09\"\n        },\n        {\n            \"id\": 13,\n            \"name\": \"New dr\",\n            \"email\": \"newdr@example.com\",\n            \"role\": \"doctor\",\n            \"is_duty\": 0,\n            \"created_at\": \"2025-11-12 12:14:53\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "List Duty Doctors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/doctors.php?duty=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"doctors.php"
+							],
+							"query": [
+								{
+									"key": "duty",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "List Duty Doctors",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/doctors.php?duty=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"doctors.php"
+									],
+									"query": [
+										{
+											"key": "duty",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:47:20 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "29"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"doctors\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Doctor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"admin_id\": {{adminId}},\n  \"name\": \"Dr. Example\",\n  \"email\": \"dr1@example.com\",\n  \"password\": \"docpass\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/doctors.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"doctors.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Doctor",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"admin_id\": {{adminId}},\n  \"name\": \"Dr. Example\",\n  \"email\": \"dr@example.com\",\n  \"password\": \"docpass\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/doctors.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"doctors.php"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:47:37 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "48"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": false,\n    \"error\": \"Email already exists\"\n}"
+						},
+						{
+							"name": "Create Doctor",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"admin_id\": {{adminId}},\n  \"name\": \"Dr. Example\",\n  \"email\": \"dr1@example.com\",\n  \"password\": \"docpass\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/doctors.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"doctors.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:47:47 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"doctor_id\": 14\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Doctor",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"admin_id\": {{adminId}},\n  \"id\": {{doctorId}},\n  \"name\": \"Dr. Updated\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/doctors.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"doctors.php"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set Duty Doctor",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"admin_id\": {{adminId}},\n  \"id\": {{doctorId}},\n  \"set_duty\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/doctors.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"doctors.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Set Duty Doctor",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"admin_id\": {{adminId}},\n  \"id\": {{doctorId}},\n  \"set_duty\": 1\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/doctors.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"doctors.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:47:26 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "16"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true\n}"
+						},
+						{
+							"name": "Set Duty Doctor",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"admin_id\": {{adminId}},\n  \"id\": {{doctorId}},\n  \"set_duty\": 1\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/doctors.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"doctors.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:51:53 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "16"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Remove Duty Doctor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"admin_id\": {{adminId}}\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/remove_duty_doctor.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"remove_duty_doctor.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Remove Duty Doctor",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"admin_id\": {{adminId}}\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/remove_duty_doctor.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"remove_duty_doctor.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:54:17 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "16"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Duty Doctors (Alt)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/get_duty_doctors.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"get_duty_doctors.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Duty Doctors (Alt)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/get_duty_doctors.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"get_duty_doctors.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:53:31 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "142"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"doctors\": [\n        {\n            \"id\": 14,\n            \"name\": \"Dr. Example\",\n            \"email\": \"dr1@example.com\",\n            \"is_duty\": 1,\n            \"created_at\": \"2025-11-12 12:17:47\"\n        }\n    ],\n    \"count\": 1\n}"
+						}
+					]
+				},
+				{
+					"name": "List Doctors (Legacy)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/list_doctors.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"list_doctors.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "List Doctors (Legacy)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/list_doctors.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"list_doctors.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:54:27 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "355"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=99"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"doctors\": [\n        {\n            \"id\": 8,\n            \"name\": \"Dr. Example\",\n            \"email\": \"dr@example.com\",\n            \"created_at\": \"2025-11-12 11:07:09\",\n            \"is_duty\": 0\n        },\n        {\n            \"id\": 14,\n            \"name\": \"Dr. Example\",\n            \"email\": \"dr1@example.com\",\n            \"created_at\": \"2025-11-12 12:17:47\",\n            \"is_duty\": 0\n        },\n        {\n            \"id\": 13,\n            \"name\": \"New dr\",\n            \"email\": \"newdr@example.com\",\n            \"created_at\": \"2025-11-12 12:14:53\",\n            \"is_duty\": 0\n        }\n    ],\n    \"total\": 3,\n    \"count\": 3\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Patients",
+			"item": [
+				{
+					"name": "Create Patient",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe\",\n  \"age\": 45,\n  \"gender\": \"male\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/patients.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"patients.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Patient",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"John Doe\",\n  \"age\": 45,\n  \"gender\": \"male\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/patients.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"patients.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:54:35 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "53"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"id\": 1,\n    \"patient_id\": \"PAT20251112001\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Search Patients (prefix)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/patients.php?q=Jo&limit=20&offset=0",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"patients.php"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "Jo"
+								},
+								{
+									"key": "limit",
+									"value": "20"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Search Patients (prefix)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/patients.php?q=Jo&limit=20&offset=0",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"patients.php"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "Jo"
+										},
+										{
+											"key": "limit",
+											"value": "20"
+										},
+										{
+											"key": "offset",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:54:41 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "191"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"patients\": [\n        {\n            \"id\": 1,\n            \"patient_id\": \"PAT20251112001\",\n            \"name\": \"John Doe\",\n            \"age\": 45,\n            \"gender\": \"male\",\n            \"assigned_doctor_id\": null,\n            \"status\": \"pending\",\n            \"created_at\": \"2025-11-12 12:24:35\"\n        }\n    ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Create Task (multipart with image)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "technician_id",
+									"value": "{{technicianId}}",
+									"type": "text"
+								},
+								{
+									"key": "patient_id",
+									"value": "{{patientDbId}}",
+									"type": "text"
+								},
+								{
+									"key": "priority",
+									"value": "normal",
+									"type": "text"
+								},
+								{
+									"key": "technician_notes",
+									"value": "Routine ECG",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "./uploads/ecg_images/PAT20251105001_1762333021_0.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/create_task.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"create_task.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Task (multipart with image)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "technician_id",
+											"value": "{{technicianId}}",
+											"type": "text"
+										},
+										{
+											"key": "patient_id",
+											"value": "{{patientDbId}}",
+											"type": "text"
+										},
+										{
+											"key": "priority",
+											"value": "normal",
+											"type": "text"
+										},
+										{
+											"key": "technician_notes",
+											"value": "Routine ECG",
+											"type": "text"
+										},
+										{
+											"key": "comment",
+											"value": "Initial upload",
+											"type": "text"
+										},
+										{
+											"key": "image",
+											"type": "file",
+											"src": "./uploads/ecg_images/PAT20251105001_1762333021_0.jpeg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/create_task.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"create_task.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:55:23 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "48"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"task_id\": 2,\n    \"images_uploaded\": 0\n}"
+						}
+					]
+				},
+				{
+					"name": "Duty Doctor - My Tasks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/duty_tasks.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"duty_tasks.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Duty Doctor - My Tasks",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/duty_tasks.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"duty_tasks.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:56:33 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "68"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"tasks\": [],\n    \"count\": 0,\n    \"message\": \"No duty doctor set\"\n}"
+						}
+					]
+				},
+				{
+					"name": "List Tasks (filters)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/list_tasks.php?doctor_id={{doctorId}}&status=assigned&limit=50&offset=0",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"list_tasks.php"
+							],
+							"query": [
+								{
+									"key": "doctor_id",
+									"value": "{{doctorId}}"
+								},
+								{
+									"key": "status",
+									"value": "assigned"
+								},
+								{
+									"key": "limit",
+									"value": "50"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "list doctors tasks",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/list_tasks.php?doctor_id={{doctorId}}&status=assigned&limit=50&offset=0",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"list_tasks.php"
+									],
+									"query": [
+										{
+											"key": "doctor_id",
+											"value": "{{doctorId}}"
+										},
+										{
+											"key": "status",
+											"value": "assigned"
+										},
+										{
+											"key": "limit",
+											"value": "50"
+										},
+										{
+											"key": "offset",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 06:57:10 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "480"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"tasks\": [\n        {\n            \"id\": 3,\n            \"patient_id\": 1,\n            \"technician_id\": 11,\n            \"assigned_doctor_id\": 14,\n            \"status\": \"assigned\",\n            \"priority\": \"normal\",\n            \"technician_notes\": \"Routine ECG\",\n            \"assigned_at\": \"2025-11-12 12:26:53\",\n            \"created_at\": \"2025-11-12 12:26:53\",\n            \"comment\": \"Initial upload\",\n            \"technician_name\": \"Tech One\",\n            \"technician_email\": \"tech1@example.com\",\n            \"doctor_name\": \"Dr. Example\",\n            \"doctor_email\": \"dr1@example.com\",\n            \"patient_name\": \"John Doe\",\n            \"patient_id_str\": \"PAT20251112001\",\n            \"patient_age\": 45\n        }\n    ],\n    \"count\": 1\n}"
+						},
+						{
+							"name": "list technicians tasks",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/list_tasks.php?status=assigned&limit=50&offset=0&technician_id=11",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"list_tasks.php"
+									],
+									"query": [
+										{
+											"key": "doctor_id",
+											"value": "{{doctorId}}",
+											"disabled": true
+										},
+										{
+											"key": "status",
+											"value": "assigned"
+										},
+										{
+											"key": "limit",
+											"value": "50"
+										},
+										{
+											"key": "offset",
+											"value": "0"
+										},
+										{
+											"key": "technician_id",
+											"value": "11"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 07:03:06 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1800"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=97"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"tasks\": [\n        {\n            \"id\": 7,\n            \"patient_id\": 1,\n            \"technician_id\": 11,\n            \"assigned_doctor_id\": 14,\n            \"status\": \"assigned\",\n            \"priority\": \"normal\",\n            \"technician_notes\": \"Routine ECG\",\n            \"assigned_at\": \"2025-11-12 12:29:37\",\n            \"created_at\": \"2025-11-12 12:29:37\",\n            \"comment\": null,\n            \"technician_name\": \"Tech One\",\n            \"technician_email\": \"tech1@example.com\",\n            \"doctor_name\": \"Dr. Example\",\n            \"doctor_email\": \"dr1@example.com\",\n            \"patient_name\": \"John Doe\",\n            \"patient_id_str\": \"PAT20251112001\",\n            \"patient_age\": 45\n        },\n        {\n            \"id\": 5,\n            \"patient_id\": 1,\n            \"technician_id\": 11,\n            \"assigned_doctor_id\": 14,\n            \"status\": \"assigned\",\n            \"priority\": \"normal\",\n            \"technician_notes\": \"Routine ECG\",\n            \"assigned_at\": \"2025-11-12 12:28:07\",\n            \"created_at\": \"2025-11-12 12:28:07\",\n            \"comment\": \"Initial upload\",\n            \"technician_name\": \"Tech One\",\n            \"technician_email\": \"tech1@example.com\",\n            \"doctor_name\": \"Dr. Example\",\n            \"doctor_email\": \"dr1@example.com\",\n            \"patient_name\": \"John Doe\",\n            \"patient_id_str\": \"PAT20251112001\",\n            \"patient_age\": 45\n        },\n        {\n            \"id\": 4,\n            \"patient_id\": 1,\n            \"technician_id\": 11,\n            \"assigned_doctor_id\": 14,\n            \"status\": \"assigned\",\n            \"priority\": \"normal\",\n            \"technician_notes\": \"Routine ECG\",\n            \"assigned_at\": \"2025-11-12 12:27:54\",\n            \"created_at\": \"2025-11-12 12:27:54\",\n            \"comment\": \"Initial upload\",\n            \"technician_name\": \"Tech One\",\n            \"technician_email\": \"tech1@example.com\",\n            \"doctor_name\": \"Dr. Example\",\n            \"doctor_email\": \"dr1@example.com\",\n            \"patient_name\": \"John Doe\",\n            \"patient_id_str\": \"PAT20251112001\",\n            \"patient_age\": 45\n        },\n        {\n            \"id\": 3,\n            \"patient_id\": 1,\n            \"technician_id\": 11,\n            \"assigned_doctor_id\": 14,\n            \"status\": \"assigned\",\n            \"priority\": \"normal\",\n            \"technician_notes\": \"Routine ECG\",\n            \"assigned_at\": \"2025-11-12 12:26:53\",\n            \"created_at\": \"2025-11-12 12:26:53\",\n            \"comment\": \"Initial upload\",\n            \"technician_name\": \"Tech One\",\n            \"technician_email\": \"tech1@example.com\",\n            \"doctor_name\": \"Dr. Example\",\n            \"doctor_email\": \"dr1@example.com\",\n            \"patient_name\": \"John Doe\",\n            \"patient_id_str\": \"PAT20251112001\",\n            \"patient_age\": 45\n        }\n    ],\n    \"count\": 4\n}"
+						}
+					]
+				},
+				{
+					"name": "Duty Doctor - Complete Task",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"doctor_id\": {{doctorId}},\n  \"task_id\": {{taskId}},\n  \"comment\": \"Report finalized.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/duty_update_task.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"duty_update_task.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Duty Doctor - Complete Task",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"doctor_id\": {{doctorId}},\n  \"task_id\": {{taskId}},\n  \"comment\": \"Report finalized.\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/duty_update_task.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"duty_update_task.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 07:00:21 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "53"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=99"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Task marked as completed\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Generic Task Update",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"task_id\": {{taskId}},\n  \"user_id\": {{doctorId}},\n  \"status\": \"in_progress\",\n  \"feedback\": \"Working on it\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/update_task.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"update_task.php"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Generic Task Update",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"task_id\": {{taskId}},\n  \"user_id\": {{doctorId}},\n  \"status\": \"in_progress\",\n  \"feedback\": \"Working on it\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/update_task.php",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"update_task.php"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 12 Nov 2025 07:01:15 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.56 (Unix) OpenSSL/1.1.1t PHP/8.2.4 mod_perl/2.0.12 Perl/v5.34.1"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Content-Type, Authorization, X-Requested-With, Accept"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "86400"
+								},
+								{
+									"key": "Content-Length",
+									"value": "41"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Task updated\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "PG",
+			"item": [
+				{
+					"name": "Create PG (Doctor)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"PG User\",\n  \"email\": \"pg1@example.com\",\n  \"password\": \"pass12345\",\n  \"created_by\": {{doctorId}}\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/create_pg.php", "host": ["{{baseUrl}}"], "path": ["create_pg.php"] }
+					},
+					"response": []
+				},
+				{
+					"name": "Doctor Assign PG",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"task_id\": {{taskId}},\n  \"pg_id\": {{pgId}},\n  \"doctor_id\": {{doctorId}}\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/doctor_assign_pg.php", "host": ["{{baseUrl}}"], "path": ["doctor_assign_pg.php"] }
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Utilities",
+			"item": [
+				{
+					"name": "DB Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/test_db.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test_db.php"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost/ecg_new/api",
+			"type": "string"
+		},
+		{
+			"key": "adminId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "doctorId",
+			"value": "2",
+			"type": "string"
+		},
+		{
+			"key": "technicianId",
+			"value": "3",
+			"type": "string"
+		},
+		{
+			"key": "patientDbId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "taskId",
+			"value": "1",
+			"type": "string"
+		}
+	]
+}

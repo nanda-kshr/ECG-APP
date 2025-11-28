@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Allow cleartext traffic to specific IP/API host. Prefer HTTPS in production. -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">10.56.181.103</domain>
+    </domain-config>
+</network-security-config>
