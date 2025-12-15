@@ -11,7 +11,7 @@ class PGService {
     required String name,
     required String email,
     required String password,
-    required int createdBy, // doctor_id
+    required int doctorId, // doctor_id
   }) async {
     final url = Uri.parse('${apiBase}pgs.php');
     try {
@@ -19,7 +19,7 @@ class PGService {
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'doctor_id': createdBy,
+          'doctor_id': doctorId,
           'name': name,
           'email': email,
           'password': password,

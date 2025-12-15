@@ -237,7 +237,7 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
       name: nameController.text.trim(),
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
-      createdBy: currentUser.id,
+      doctorId: currentUser.id,
     );
 
     if (mounted) {

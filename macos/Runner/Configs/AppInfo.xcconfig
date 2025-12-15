@@ -8,7 +8,7 @@
 PRODUCT_NAME = ecg_flutter_app
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.ecgFlutterApp
+PRODUCT_BUNDLE_IDENTIFIER = com.simats.saveethacardioapp
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2025 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2025 com.simats. All rights reserved.

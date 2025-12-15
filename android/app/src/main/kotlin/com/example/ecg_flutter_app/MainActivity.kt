@@ -1,5 +1,6 @@
-package com.example.ecg_flutter_app
+package com.simats.saveethacardioapp
 
 import io.flutter.embedding.android.FlutterActivity
 
-class MainActivity : FlutterActivity()
+// Deprecated path: legacy MainActivity. Using new package path instead.
+class MainActivityOldDeprecated : FlutterActivity()

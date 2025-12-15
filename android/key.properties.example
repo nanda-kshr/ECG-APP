@@ -1,0 +1,6 @@
+# Rename to key.properties and fill in your values. This file should NOT be committed to source control.
+# Example key.properties for Android release signing
+storePassword=YOUR_STORE_PASSWORD
+keyPassword=YOUR_KEY_PASSWORD
+keyAlias=ecg_key
+storeFile=/absolute/path/to/your/keystore.jks
