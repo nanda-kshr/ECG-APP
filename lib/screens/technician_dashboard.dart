@@ -130,7 +130,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: CommonAppBar(
-        title: 'Clinic Doctor Dashboard',
+        title: 'Cardio',
         user: user,
         onLogout: () {
           Navigator.of(context).pushReplacement(
@@ -148,23 +148,27 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
             children: [
               SizedBox(
                 width: double.infinity,
-                height: 60,
-                child: ElevatedButton.icon(
-                  onPressed: _navigateToUpload,
-                  icon: const Icon(Icons.upload_file, size: 28),
-                  label: const Text(
-                    'Upload New ECG',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                height: 80,
+                child: Builder(builder: (context) {
+                  final uploadAllowed = _isUploadAllowed();
+                  return ElevatedButton.icon(
+                    onPressed: uploadAllowed ? _navigateToUpload : () => _showUploadDisabledSnackbar(context),
+                    icon: const Icon(Icons.upload_file, size: 32),
+                    label: Text(
+                      uploadAllowed ? 'Upload ECG' : 'Upload\n(Mon–Fri, 8–3 PM IST)',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
-                    elevation: 4,
-                  ),
-                ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: uploadAllowed ? Colors.green : Colors.grey,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 4,
+                    ),
+                  );
+                }),
               ),
               const SizedBox(height: 24),
               const Text('Statistics',
@@ -395,8 +399,6 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                   Text(task.createdAt.toString().substring(0, 16),
                       style: TextStyle(fontSize: 12, color: Colors.grey[600])),
                   const SizedBox(width: 16),
-                  Icon(Icons.local_hospital, size: 14, color: Colors.grey[600]),
-                  const SizedBox(width: 4),
                   // Text('Priority: ${task.priorityDisplay}',
                   //     style: TextStyle(fontSize: 12, color: Colors.grey[600])),
                 ],
@@ -432,6 +434,22 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
     final parts = name.trim().split(' ');
     if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
     return name.isNotEmpty ? name[0].toUpperCase() : 'U';
+  }
+
+  bool _isUploadAllowed() {
+    final ist = DateTime.now().toUtc().add(const Duration(hours: 5, minutes: 30));
+    final weekday = ist.weekday; // 1 = Monday
+    if (weekday < DateTime.monday || weekday > DateTime.friday) return false;
+    final hour = ist.hour;
+    return hour >= 8 && hour < 15;
+  }
+
+  void _showUploadDisabledSnackbar(BuildContext context) {
+    final ist = DateTime.now().toUtc().add(const Duration(hours: 5, minutes: 30));
+    // final timeStr = '${ist.hour.toString().padLeft(2, '0')}:${ist.minute.toString().padLeft(2, '0')} IST';
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(content: Text('Uploads allowed Mon–Fri 08:00–15:00 IST. Current IST time: $timeStr')),
+    // );
   }
 
   Widget _buildEmptyState() {

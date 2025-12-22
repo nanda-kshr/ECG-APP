@@ -63,23 +63,6 @@ class _TaskListScreenState extends State<TaskListScreen> {
     }
   }
 
-  Color _getStatusColor(String status) {
-    switch (status) {
-      case 'pending':
-        return Colors.orange;
-      case 'assigned':
-        return Colors.blue;
-      case 'in_progress':
-        return Colors.purple;
-      case 'completed':
-        return Colors.green;
-      case 'cancelled':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,38 +121,29 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const SizedBox(height: 4),
-                                  Text(
-                                      'Doctor: ${task.doctorName ?? ''}'),
-                                  Text(
-                                      'Clinic Doctor: ${task.technicianName ?? ''}'),
+                                  Text('Doctor: ${task.doctorName ?? ''}'),
+                                  Text('Clinic Doctor: ${task.technicianName ?? ''}'),
                                   const SizedBox(height: 4),
-                                  Row(
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8, vertical: 2),
-                                        decoration: BoxDecoration(
-                                          color: _getStatusColor(task.status),
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        child: Text(
-                                          task.statusDisplay,
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        task.createdAt
-                                            .toString()
-                                            .substring(0, 16),
-                                        style: const TextStyle(
-                                            fontSize: 12, color: Colors.grey),
-                                      ),
-                                    ],
+                                  Text(
+                                    task.createdAt.toString().substring(0, 16),
+                                    style: const TextStyle(fontSize: 12, color: Colors.grey),
                                   ),
+                                  // If task is completed and has doctor feedback, show it (read-only)
+                                  if (task.status == 'completed' && (task.doctorFeedback != null && task.doctorFeedback!.isNotEmpty)) ...[
+                                    const SizedBox(height: 8),
+                                    Container(
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: Colors.green.withOpacity(0.04),
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      child: Text(
+                                        task.doctorFeedback!,
+                                        style: const TextStyle(fontSize: 13),
+                                      ),
+                                    ),
+                                  ],
                                 ],
                               ),
                               isThreeLine: true,

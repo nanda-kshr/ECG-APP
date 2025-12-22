@@ -104,7 +104,7 @@ try {
 
     $pdo->commit();
 
-    echo json_encode(['success'=>true, 'message' => 'Task updated']);
+    echo json_encode(['success'=>true, 'message' => 'Opinion Updated']);
 
 } catch (Throwable $e) {
     if (isset($pdo) && $pdo->inTransaction()) {

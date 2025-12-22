@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "873893347572",
+    "project_id": "saveethacardioapp",
+    "storage_bucket": "saveethacardioapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:873893347572:android:c54535dc719e11ab775ea1",
+        "android_client_info": {
+          "package_name": "com.simats.saveethacardioapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABPersh6xVwrCql8vey7YGaTJbaGcR9k4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

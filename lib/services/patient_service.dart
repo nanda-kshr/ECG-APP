@@ -4,7 +4,7 @@ import '../config.dart';
 import '../models/patient.dart';
 
 class PatientService {
-  static const String apiBase = kApiBaseUrl;
+  static const String apiBase = apiBaseUrl;
 
   // Search patients by name/id string
   static Future<List<Patient>> searchPatients(

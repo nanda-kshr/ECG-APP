@@ -3,14 +3,16 @@ import '../models/user.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../config.dart';
+import 'push_service.dart';
 
 class AuthService {
-  static const String apiBase = kApiBaseUrl;
+  static const String apiBase = apiBaseUrl;
   static const String _currentUserKey = 'current_user_id';
   static const String _currentUserJsonKey =
       'current_user_json'; // new: store full user json
 
   static User? _currentUser;
+  static String? _sessionCookie;
 
   static User? get currentUser => _currentUser;
 
@@ -19,16 +21,23 @@ class AuthService {
       {String? role}) async {
     final String apiUrl = '${apiBase}login.php';
     try {
-      // Prefer JSON body
+      // Prefer JSON body. Include fcm_token if available
+      final token = PushService.token ?? await PushService.getLocalToken();
+      final jsonBody = {
+        'email': email,
+        'password': password,
+        if (role != null) 'role': role,
+        if (token != null) 'fcm_token': token,
+      };
+
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'email': email,
-          'password': password,
-          if (role != null) 'role': role
-        }),
+        body: jsonEncode(jsonBody),
       );
+
+      // Capture session cookie if provided
+      _captureSessionCookieFromResponse(response);
       if (_handleLoginResponse(response)) return true;
 
       // Fallback: form encoded
@@ -38,6 +47,7 @@ class AuthService {
         body:
             'email=${Uri.encodeQueryComponent(email)}&password=${Uri.encodeQueryComponent(password)}${role != null ? '&role=${Uri.encodeQueryComponent(role)}' : ''}',
       );
+      _captureSessionCookieFromResponse(formResponse);
       if (_handleLoginResponse(formResponse)) return true;
     } catch (e, st) {
       // Better logging for web XMLHttpRequest errors
@@ -84,6 +94,28 @@ class AuthService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_currentUserKey);
     await prefs.remove(_currentUserJsonKey); // clear full user json as well
+    await prefs.remove('session_cookie');
+  }
+
+  static Future<void> _captureSessionCookieFromResponse(http.Response response) async {
+    try {
+      final sc = response.headers['set-cookie'];
+      if (sc != null && sc.isNotEmpty) {
+        _sessionCookie = sc.split(';').first; // keep only cookie=value
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('session_cookie', _sessionCookie!);
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  static Future<String?> getSessionCookie() async {
+    if (_sessionCookie != null) return _sessionCookie;
+    final prefs = await SharedPreferences.getInstance();
+    final sc = prefs.getString('session_cookie');
+    _sessionCookie = sc;
+    return sc;
   }
 
   static Future<bool> isLoggedIn() async {

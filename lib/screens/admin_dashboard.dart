@@ -136,7 +136,7 @@ class _AdminHomeTabState extends State<AdminHomeTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin Dashboard'),
+        title: const Text('Cardio App'),
         actions: [
           IconButton(onPressed: _load, icon: const Icon(Icons.refresh)),
           IconButton(
@@ -249,7 +249,6 @@ class _AdminHomeTabState extends State<AdminHomeTab> {
   }
 
   Widget _buildTaskCardCompact(Task task) {
-    final statusColor = _getStatusColor(task.status);
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
@@ -288,30 +287,6 @@ class _AdminHomeTabState extends State<AdminHomeTab> {
             ),
           ],
         ),
-        trailing: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            // Container(
-            //   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            //   decoration: BoxDecoration(
-            //     color: statusColor.withOpacity(0.15),
-            //     borderRadius: BorderRadius.circular(15),
-            //     border: Border.all(color: statusColor.withOpacity(0.6)),
-            //   ),
-            //   child: Text(
-            //     _getStatusText(task.status),
-            //     style: TextStyle(
-            //       color: statusColor,
-            //       fontSize: 11,
-            //       fontWeight: FontWeight.w600,
-            //     ),
-            //   ),
-            // ),
-            // const SizedBox(height: 6),
-          ],
-        ),
         onTap: () {
           Navigator.push(
             context,
@@ -331,35 +306,6 @@ class _AdminHomeTabState extends State<AdminHomeTab> {
       return names[0][0].toUpperCase();
     }
     return 'U';
-  }
-
-  Color _getStatusColor(String status) {
-    switch (status) {
-      case 'pending':
-        return Colors.orange;
-      case 'assigned':
-      case 'in_progress':
-        return Colors.blue;
-      case 'completed':
-        return Colors.green;
-      default:
-        return Colors.grey;
-    }
-  }
-
-  String _getStatusText(String status) {
-    switch (status) {
-      case 'pending':
-        return 'Pending';
-      case 'assigned':
-        return 'Assigned';
-      case 'in_progress':
-        return 'In Progress';
-      case 'completed':
-        return 'Completed';
-      default:
-        return 'Unknown';
-    }
   }
 
   Widget _buildStatCard(

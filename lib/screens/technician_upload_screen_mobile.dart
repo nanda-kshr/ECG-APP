@@ -42,6 +42,35 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
   bool _isCreatingPatient = false;
   String? _createError;
 
+  // pending images count
+  int _pendingCount = 0;
+  bool _loadingPendingCount = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchPendingCount();
+  }
+
+  Future<void> _fetchPendingCount() async {
+    setState(() => _loadingPendingCount = true);
+    final count = await TaskService.getPendingImagesCount();
+    setState(() {
+      _pendingCount = count;
+      _loadingPendingCount = false;
+    });
+  }
+
+  String _formatEstimatedTime(int count) {
+    final totalMinutes = count * 15;
+    final hours = totalMinutes ~/ 60;
+    final minutes = totalMinutes % 60;
+    if (hours > 0) {
+      return '${hours}h ${minutes}m';
+    }
+    return '${minutes}m';
+  }
+
   Future<void> _captureFromCamera() async {
     try {
       final image = await _picker.pickImage(
@@ -89,8 +118,10 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
         contactToSend = compact;
       } else {
         var digits = compact.replaceFirst(RegExp(r'^0+'), '');
-        if (digits.isNotEmpty) contactToSend = '+91' + digits;
-        else contactToSend = null;
+        if (digits.isNotEmpty)
+          contactToSend = '+91' + digits;
+        else
+          contactToSend = null;
       }
     } else {
       contactToSend = null;
@@ -109,9 +140,8 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
       if (res['patient'] is Patient) {
         p = res['patient'] as Patient;
       } else if (res['patient_id'] != null || res['id'] != null) {
-        final providedId = res['id'] != null
-            ? int.tryParse(res['id'].toString())
-            : null;
+        final providedId =
+            res['id'] != null ? int.tryParse(res['id'].toString()) : null;
         p = Patient(
           id: providedId ?? 0,
           patientId:
@@ -193,6 +223,7 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
         _isUploading = false;
         if (result['success'] == true) {
           _successMessage = 'ECG uploaded';
+          _fetchPendingCount(); // Refresh queue count after upload
           _notesController.clear();
           _selectedImages = [];
           _selectedPatient = null;
@@ -237,9 +268,9 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text('Patient',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 12),
-
                       TextField(
                         controller: _patientSearchController,
                         decoration: InputDecoration(
@@ -252,7 +283,8 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
                                   child: SizedBox(
                                       height: 20,
                                       width: 20,
-                                      child: CircularProgressIndicator(strokeWidth: 2)),
+                                      child: CircularProgressIndicator(
+                                          strokeWidth: 2)),
                                 )
                               : IconButton(
                                   icon: const Icon(Icons.search),
@@ -278,7 +310,8 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
                                       setState(() {
                                         _selectedPatient = p;
                                         _options = [];
-                                        _patientSearchController.text = p.displayInfo;
+                                        _patientSearchController.text =
+                                            p.displayInfo;
                                       });
                                     },
                                   )),
@@ -287,11 +320,11 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
                           ],
                         ),
                       ),
-
                       if (_selectedPatient == null) ...[
                         const SizedBox(height: 16),
                         const Text('Or Enter Patient Details',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
                         const SizedBox(height: 8),
                         TextFormField(
                           controller: _nameController,
@@ -311,7 +344,8 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
                         ),
                         const SizedBox(height: 8),
                         if (_createError != null)
-                          Text(_createError!, style: const TextStyle(color: Colors.red)),
+                          Text(_createError!,
+                              style: const TextStyle(color: Colors.red)),
                         const SizedBox(height: 8),
                         ElevatedButton(
                           onPressed: _isCreatingPatient ? null : _createPatient,
@@ -320,11 +354,10 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
                               : const Text('Add Patient'),
                         ),
                       ],
-
                       const SizedBox(height: 30),
-
                       const Text('ECG Images',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 12),
                       Container(
                         width: double.infinity,
@@ -335,10 +368,12 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
                             _selectedImages.isEmpty
                                 ? 'Capture ECG'
                                 : 'Capture ECG (${_selectedImages.length} selected)',
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500),
                           ),
                           style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 24),
                             backgroundColor: Colors.blue.shade600,
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
@@ -371,12 +406,14 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
                                     height: 100,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(color: Colors.grey.shade300),
+                                      border: Border.all(
+                                          color: Colors.grey.shade300),
                                     ),
                                     child: Stack(
                                       children: [
                                         ClipRRect(
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
                                           child: Image.file(
                                             File(file.path),
                                             fit: BoxFit.cover,
@@ -389,7 +426,8 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
                                           right: 4,
                                           child: GestureDetector(
                                             onTap: () {
-                                              setState(() => _selectedImages.remove(file));
+                                              setState(() =>
+                                                  _selectedImages.remove(file));
                                             },
                                             child: Container(
                                               padding: const EdgeInsets.all(4),
@@ -437,7 +475,7 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
               TextFormField(
                 controller: _notesController,
                 decoration: const InputDecoration(
-                  labelText: 'Notes (optional)',
+                  labelText: 'Short Clinical History',
                   border: OutlineInputBorder(),
                   hintText: 'Additional information or observations',
                 ),
@@ -464,22 +502,111 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
                       style: const TextStyle(color: Colors.green)),
                 ),
 
+              if (!_isUploadAllowed()) ...[
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  margin: const EdgeInsets.only(bottom: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.yellow.shade100,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  // child: Row(
+                  //   children: [
+                  //     const Icon(Icons.info, color: Colors.orange),
+                  //     const SizedBox(width: 8),
+                  //     Expanded(
+                  //       child: Text(
+                  //         'Uploads are allowed Mon–Fri 08:00–15:00 IST. Current IST time: ${_currentIstString()}',
+                  //         style: const TextStyle(color: Colors.black87),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                ),
+              ],
+
+              // Emergency warning: concise and fits the section
+
               ElevatedButton(
-                onPressed: _isUploading ? null : _uploadECG,
+                onPressed: _isUploading
+                    ? null
+                    : (_isUploadAllowed()
+                        ? _uploadECG
+                        : _showUploadDisabledDialog),
                 style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(16),
-                    backgroundColor: Colors.blue),
+                    backgroundColor:
+                        _isUploadAllowed() ? Colors.blue : Colors.grey),
                 child: _isUploading
                     ? const CircularProgressIndicator(color: Colors.white)
                     : const Text('Upload & Submit',
-                        style: TextStyle(fontSize: 16, color: Colors.white,)),
-                        
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        )),
+              ),
+
+              const SizedBox(height: 20),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                margin: const EdgeInsets.only(bottom: 12),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.red.shade100),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.warning_amber_rounded, color: Colors.red),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        'If this is an emergency, call Emergency Department: (044) 6672 6612',
+                        style: TextStyle(
+                            color: Colors.red.shade700,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  bool _isUploadAllowed() {
+    final ist =
+        DateTime.now().toUtc().add(const Duration(hours: 5, minutes: 30));
+    final weekday = ist.weekday;
+    if (weekday < DateTime.monday || weekday > DateTime.friday) return false;
+    final hour = ist.hour;
+    return hour >= 8 && hour < 15;
+  }
+
+  String _currentIstString() {
+    final ist =
+        DateTime.now().toUtc().add(const Duration(hours: 5, minutes: 30));
+    return '${ist.hour.toString().padLeft(2, '0')}:${ist.minute.toString().padLeft(2, '0')} IST';
+  }
+
+  void _showUploadDisabledDialog() {
+    // final now = _currentIstString();
+    // showDialog<void>(
+    //   context: context,
+    //   barrierDismissible: true,
+    //   builder: (context) => AlertDialog(
+    //     title: const Text('Upload Disabled'),
+    //     content: Text('Uploads are allowed Mon–Fri 08:00–15:00 IST. Current IST time: $now'),
+    //     actions: [
+    //       TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK')),
+    //     ],
+    //   ),
+    // );
   }
 
   @override

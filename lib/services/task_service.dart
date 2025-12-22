@@ -4,7 +4,7 @@ import '../models/task.dart';
 import '../config.dart';
 
 class TaskService {
-  static const String apiBase = kApiBaseUrl;
+  static const String apiBase = apiBaseUrl;
 
   // List tasks with filters (admin view)
   static Future<List<Task>> listTasks({
@@ -244,6 +244,53 @@ class TaskService {
       };
     } catch (e) {
       return {'success': false, 'error': 'Connection error: $e'};
+    }
+  }
+
+  // Fetch a task by id by listing recent tasks and finding the matching id
+  static Future<Task?> getTaskById(int taskId) async {
+    // Try to fetch recent tasks (doctor-specific first)
+    try {
+      final resp = await http
+          .get(Uri.parse('${apiBase}list_tasks.php?limit=200'))
+          .timeout(const Duration(seconds: 10));
+      if (resp.statusCode == 200) {
+        final decoded = jsonDecode(resp.body);
+        if (decoded['success'] == true && decoded['tasks'] != null) {
+          final tasks = (decoded['tasks'] as List)
+              .map((json) => Task.fromJson(json))
+              .toList();
+          for (final t in tasks) {
+            if (t.id == taskId) return t;
+          }
+        }
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  // Get the count of pending ECG images
+  static Future<int> getPendingImagesCount({
+    int? doctorId,
+    int? technicianId,
+  }) async {
+    final queryParams = <String, String>{
+      if (doctorId != null) 'doctor_id': doctorId.toString(),
+      if (technicianId != null) 'technician_id': technicianId.toString(),
+    };
+    final url = Uri.parse('${apiBase}pending_images_count.php')
+        .replace(queryParameters: queryParams);
+    try {
+      final resp = await http.get(url).timeout(const Duration(seconds: 10));
+      if (resp.statusCode == 200) {
+        final decoded = jsonDecode(resp.body);
+        if (decoded['success'] == true && decoded['count'] != null) {
+          return decoded['count'] as int;
+        }
+      }
+      return 0;
+    } catch (e) {
+      return 0;
     }
   }
 }

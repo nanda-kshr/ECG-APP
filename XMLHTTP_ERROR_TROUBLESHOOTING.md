@@ -212,7 +212,7 @@ Header set Access-Control-Allow-Headers "Origin, Content-Type, Authorization, X-
 If server IP changed, update `lib/config.dart`:
 
 ```dart
-const String kApiBaseUrl = 'http://YOUR_NEW_IP/ecg_new/api/';
+const String apiBaseUrl = 'http://YOUR_NEW_IP/ecg_new/api/';
 ```
 
 Then restart Flutter app:

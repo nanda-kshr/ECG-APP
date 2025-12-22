@@ -4,7 +4,7 @@ import '../models/pg.dart';
 import '../config.dart';
 
 class PGService {
-  static const String apiBase = kApiBaseUrl;
+  static const String apiBase = apiBaseUrl;
 
   /// Create a new PG (doctor can create) - POST /pgs.php
   static Future<Map<String, dynamic>> createPG({

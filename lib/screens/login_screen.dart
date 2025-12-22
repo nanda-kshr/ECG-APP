@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import '../services/push_service.dart';
 import 'signup_screen.dart';
 
 // Make sure you import your dashboard screens and UserRole enum
@@ -35,6 +36,12 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     if (success) {
+      // Ensure FCM token is registered on the server for this user
+      try {
+        await PushService.ensureRegisteredAfterLogin();
+      } catch (e) {
+        // non-fatal
+      }
       _navigateToRoleBasedScreen();
     } else {
       setState(() {
@@ -96,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.favorite, size: 48, color: Colors.blue[600]),
+                    Icon(Icons.login, size: 48, color: Colors.blue[600]),
                     const SizedBox(height: 16),
                     TextFormField(
                       decoration: InputDecoration(

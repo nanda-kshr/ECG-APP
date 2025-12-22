@@ -88,7 +88,7 @@ All endpoints are in `server/api/`:
   ```json
   {
     "success": true,
-    "message": "Task updated"
+    "message": "Opinion updated"
   }
   ```
 

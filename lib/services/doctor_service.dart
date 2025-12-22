@@ -4,7 +4,7 @@ import '../models/doctor.dart';
 import '../config.dart';
 
 class DoctorService {
-  static const String apiBase = kApiBaseUrl;
+  static const String apiBase = apiBaseUrl;
 
   // List doctors (optionally filter duty=1)
   static Future<Map<String, dynamic>> listDoctors({

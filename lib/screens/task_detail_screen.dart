@@ -58,7 +58,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     if (image.imageUrl != null && image.imageUrl!.isNotEmpty) {
       return image.imageUrl!;
     }
-    String baseUrl = kApiBaseUrl;
+    String baseUrl = apiBaseUrl;
     if (!baseUrl.endsWith('/')) {
       baseUrl = '$baseUrl/';
     }
@@ -151,7 +151,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     final feedbackText = _getAllFeedback();
 
     Map<String, dynamic> result;
-    final isDoctor = currentUser.role.name == 'doctor' || currentUser.role.name == 'pg';
+    final isDoctor = currentUser.role.name == 'doctor';
     if (isDoctor && newStatus == 'completed') {
       result = await TaskService.dutyUpdateTask(
         taskId: widget.task.id,
@@ -178,29 +178,16 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     setState(() {
       _isUpdating = false;
       if (result['success'] == true) {
-        _successMessage = result['message'] ?? 'Task updated successfully';
+        _successMessage = result['message'] ?? 'Opinion updated successfully';
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) Navigator.of(context).pop();
+        });
       } else {
         _errorMessage = result['error'] ?? 'Failed to update task';
       }
     });
   }
 
-  Color _getStatusColor(String status) {
-    switch (status) {
-      case 'pending':
-        return Colors.orange;
-      case 'assigned':
-        return Colors.blue;
-      case 'in_progress':
-        return Colors.purple;
-      case 'completed':
-        return Colors.green;
-      case 'cancelled':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
-  }
 
   String _formatTime(DateTime? dateTime) {
     if (dateTime == null) return '';
@@ -221,12 +208,13 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   Widget build(BuildContext context) {
     final task = widget.task;
     final currentUser = AuthService.currentUser;
-    final isDoctor = currentUser?.role.name == 'doctor' || currentUser?.role.name == 'pg';
+    final isDoctor = currentUser?.role.name == 'doctor';
     final isAdmin = currentUser?.role.name == 'admin';
     final isTechnician = currentUser?.role.name == 'technician';
-    // Treat technician role as patient view
-    final isPatient = isTechnician;
-    final canEditFeedback = isDoctor || isAdmin;
+    final isPg = currentUser?.role.name == 'pg';
+    // Treat technician and PG roles as patient-like view (no input)
+    final isPatient = isTechnician || isPg;
+    final canEditFeedback = (isDoctor == true) || (isAdmin == true);
 
     // Sort images in descending order (newest first at bottom like WhatsApp)
     final sortedImages = List<PatientImage>.from(task.patientLastImages);
@@ -781,85 +769,118 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
 
             // Feedback section
             if (isDoctor) ...[
-              // Doctor input box with reply button
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Your Feedback',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.grey.shade700,
+              // If feedback already exists for this image, show it read-only
+              if (image.comment != null && image.comment!.isNotEmpty) ...[
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Feedback (submitted)',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey.shade700,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade50,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: isSelected
-                                    ? _primaryColor
-                                    : Colors.grey.shade300,
-                                width: isSelected ? 2 : 1,
-                              ),
-                            ),
-                            child: TextField(
-                              controller: controller,
-                              maxLines: 3,
-                              minLines: 1,
-                              decoration: const InputDecoration(
-                                hintText: 'Enter feedback...',
-                                hintStyle: TextStyle(fontSize: 13),
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                              ),
-                              style: const TextStyle(fontSize: 13),
-                              onTap: () => setState(() => _selectedImageIndex = index),
-                            ),
-                          ),
+                      const SizedBox(height: 6),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE8F5E9),
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        const SizedBox(width: 8),
-                        Material(
-                          color: _primaryColor,
-                          borderRadius: BorderRadius.circular(24),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(24),
-                            onTap: _isUpdating ? null : () => _submitImageFeedback(image.imageId),
-                            child: Container(
-                              width: 44,
-                              height: 44,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(24),
-                              ),
-                              child: _isUpdating
-                                  ? const Padding(
-                                      padding: EdgeInsets.all(12),
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  : const Icon(
-                                      Icons.send,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
-                            ),
-                          ),
+                        child: Text(
+                          image.comment!,
+                          style: const TextStyle(fontSize: 13),
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+              ] else ...[
+                // Doctor input box with reply button
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Your Feedback',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey.shade700,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade50,
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: isSelected
+                                      ? _primaryColor
+                                      : Colors.grey.shade300,
+                                  width: isSelected ? 2 : 1,
+                                ),
+                              ),
+                              child: TextField(
+                                controller: controller,
+                                maxLines: 3,
+                                minLines: 1,
+                                decoration: const InputDecoration(
+                                  hintText: 'Enter feedback...',
+                                  hintStyle: TextStyle(fontSize: 13),
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                                ),
+                                style: const TextStyle(fontSize: 13),
+                                onTap: () => setState(() => _selectedImageIndex = index),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Material(
+                            color: _primaryColor,
+                            borderRadius: BorderRadius.circular(24),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(24),
+                              onTap: _isUpdating ? null : () => _submitImageFeedback(image.imageId),
+                              child: Container(
+                                width: 44,
+                                height: 44,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(24),
+                                ),
+                                child: _isUpdating
+                                    ? const Padding(
+                                        padding: EdgeInsets.all(12),
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : const Icon(
+                                        Icons.send,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ] else if (isPatient) ...[
               // Patient view - show feedback as label
               Padding(
@@ -982,6 +1003,9 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
       _isUpdating = false;
       if (result['success'] == true) {
         _successMessage = result['message'] ?? 'Feedback submitted';
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) Navigator.of(context).pop();
+        });
       } else {
         _errorMessage = result['error'] ?? 'Failed to submit feedback';
       }

@@ -5,6 +5,10 @@ import '../models/pg.dart';
 import '../widgets/common_app_bar.dart';
 import 'login_screen.dart';
 import '../services/task_service.dart';
+import '../services/push_service.dart';
+import '../config.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import '../services/pg_service.dart';
 import 'task_detail_screen.dart';
 
@@ -31,6 +35,8 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
     _loadAssignedTasks();
     _loadPGs();
   }
+
+
 
   Future<void> _loadAssignedTasks() async {
     setState(() {
@@ -636,7 +642,7 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
     final isPG = currentUser?.role.name == 'pg';
     return Scaffold(
       appBar: CommonAppBar(
-        title: 'Doctor Dashboard',
+        title: 'Home',
         user: currentUser!,
         onLogout: () {
           AuthService.logout();
@@ -697,25 +703,25 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                   _buildPGManagementSection(),
                   const SizedBox(height: 24),
                 ],
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Assigned Patients',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      '${_tasks.length} tasks',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                  ],
-                ),
+                 Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   children: [
+                     const Text(
+                       'Assigned Patients',
+                       style: TextStyle(
+                         fontSize: 20,
+                         fontWeight: FontWeight.bold,
+                       ),
+                     ),
+                     Text(
+                       '${_tasks.length} tasks',
+                       style: TextStyle(
+                         fontSize: 14,
+                         color: Colors.grey[600],
+                       ),
+                     ),
+                   ],
+                 ),
                 const SizedBox(height: 12),
                 if (_loading)
                   _buildLoading()
@@ -735,6 +741,7 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                       return _buildTaskCard(task);
                     },
                   ),
+                const SizedBox(height: 12),
               ],
             ),
           ),
@@ -863,87 +870,60 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                   itemBuilder: (context, index) {
                     final sortedPgs = _pgs.toList()..sort((a, b) => b.isDuty ? 1 : -1);
                     final pg = sortedPgs[index];
-                    return Card(
-                      margin: const EdgeInsets.only(right: 12),
+                    // Minimal horizontal PG chip
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 10),
                       child: InkWell(
                         onTap: () => _showPGOptionsDialog(pg),
+                        borderRadius: BorderRadius.circular(12),
                         child: Container(
-                          width: 200,
-                          padding: const EdgeInsets.all(12),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          width: 160,
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: pg.isDuty ? Colors.green.withOpacity(0.08) : Colors.grey.withOpacity(0.03),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: pg.isDuty ? Colors.green.withOpacity(0.18) : Colors.grey.withOpacity(0.12)),
+                          ),
+                          child: Row(
                             children: [
-                              Row(
-                                children: [
-                                  CircleAvatar(
-                                    backgroundColor: pg.isDuty
-                                        ? Colors.green.shade100
-                                        : Colors.blue.shade100,
-                                    child: Text(
-                                      pg.name.isNotEmpty
-                                          ? pg.name[0].toUpperCase()
-                                          : 'P',
-                                      style: TextStyle(
-                                        color: pg.isDuty
-                                            ? Colors.green.shade700
-                                            : Colors.blue.shade700,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          pg.name,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        Text(
-                                          pg.email,
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.grey[600],
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  if (pg.isDuty)
-                                    const Icon(
-                                      Icons.check_circle,
-                                      color: Colors.green,
-                                      size: 20,
-                                    ),
-                                ],
-                              ),
-                              if (pg.isDuty) ...[
-                                const SizedBox(height: 8),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 6, vertical: 2),
-                                  decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: const Text(
-                                    'ON DUTY',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 9,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                              CircleAvatar(
+                                radius: 18,
+                                backgroundColor: pg.isDuty ? Colors.green.shade100 : Colors.blue.shade50,
+                                child: Text(
+                                  pg.name.isNotEmpty ? pg.name[0].toUpperCase() : 'P',
+                                  style: TextStyle(
+                                    color: pg.isDuty ? Colors.green.shade700 : Colors.blue.shade700,
+                                    fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                              ],
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      pg.name,
+                                      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      pg.email,
+                                      style: TextStyle(fontSize: 11, color: Colors.grey[600]),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              if (pg.isDuty)
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Icon(Icons.circle, color: Colors.green.shade400, size: 10),
+                                ),
                             ],
                           ),
                         ),
@@ -1101,27 +1081,43 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.1),
+                    color: Colors.green.withOpacity(0.06),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.check_circle, size: 16, color: Colors.green),
-                      SizedBox(width: 8),
-                      Text(
-                        'Response submitted',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.green,
-                          fontWeight: FontWeight.w600,
-                        ),
+                      Row(
+                        children: [
+                          const Icon(Icons.check_circle, size: 16, color: Colors.green),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              'Reviewed',
+                              style: TextStyle(fontSize: 13, color: Colors.green[700]),
+                            ),
+                          ),
+                        ],
                       ),
+                      const SizedBox(height: 8),
+                      if (task.status == 'completed' && (task.doctorFeedback != null && task.doctorFeedback!.isNotEmpty))
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(color: Colors.green.withOpacity(0.12)),
+                          ),
+                          child: Text(
+                            task.doctorFeedback!,
+                            style: const TextStyle(fontSize: 13),
+                          ),
+                        ),
                     ],
                   ),
                 ),
               ],
-              // PG assignment is handled automatically by the backend;
-              // UI button removed to prevent manual assignment.
             ],
           ),
         ),
@@ -1130,19 +1126,15 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
   }
 
   String _getInitials(String name) {
-    final parts = name.split(' ');
-    if (parts.length >= 2) {
-      return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
-    }
-    return name.isNotEmpty ? name[0].toUpperCase() : 'P';
+    final parts = name.trim().split(' ');
+    if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+    return name.isNotEmpty ? name[0].toUpperCase() : 'U';
   }
-
-
 
   Widget _buildEmptyState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(60.0),
+        padding: const EdgeInsets.all(32.0),
         child: Column(
           children: [
             Icon(
@@ -1151,11 +1143,11 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
               color: Colors.grey[400],
             ),
             const SizedBox(height: 16),
-            Text(
+            const Text(
               'No patients assigned yet',
               style: TextStyle(
                 fontSize: 18,
-                color: Colors.grey[600],
+                color: Colors.grey,
               ),
             ),
           ],
@@ -1163,4 +1155,5 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
       ),
     );
   }
+
 }

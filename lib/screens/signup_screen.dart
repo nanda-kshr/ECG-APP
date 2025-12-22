@@ -16,7 +16,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  static const String apiBase = kApiBaseUrl;
+  static const String apiBase = apiBaseUrl;
   final _formKey = GlobalKey<FormState>();
   String name = '', email = '', password = '';
   String? role;

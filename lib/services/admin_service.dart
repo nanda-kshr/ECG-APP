@@ -4,7 +4,7 @@ import '../models/admin_dashboard.dart';
 import '../config.dart';
 
 class AdminService {
-  static const String apiBase = kApiBaseUrl;
+  static const String apiBase = apiBaseUrl;
 
   static Future<AdminDashboard?> fetchDashboard() async {
     // Use new API location if routed via base: admin_dashboard.php

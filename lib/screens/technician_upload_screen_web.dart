@@ -444,7 +444,7 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
               TextFormField(
                 controller: _notesController,
                 decoration: const InputDecoration(
-                  labelText: 'Notes (optional)',
+                  labelText: 'Short Clinical History',
                   border: OutlineInputBorder(),
                   hintText: 'Additional information or observations',
                 ),
