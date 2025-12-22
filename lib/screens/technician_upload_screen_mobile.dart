@@ -233,7 +233,24 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
             Navigator.of(context).popUntil((route) => route.isFirst);
           });
         } else {
-          _errorMessage = result['error'] ?? 'Upload failed';
+          final errCallback = result['error']?.toString() ?? 'Upload failed';
+          if (errCallback.toLowerCase().contains('high volume')) {
+            showDialog(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                title: const Text('High Volume'),
+                content: Text(errCallback),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(ctx).pop(),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            _errorMessage = errCallback;
+          }
         }
       });
     } catch (e) {
