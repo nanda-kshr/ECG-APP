@@ -122,14 +122,17 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                 children: [
                                   const SizedBox(height: 4),
                                   Text('Doctor: ${task.doctorName ?? ''}'),
-                                  Text('Clinic Doctor: ${task.technicianName ?? ''}'),
+                                  Text('Clinic Doctor: ${task.userName ?? ''}'),
                                   const SizedBox(height: 4),
                                   Text(
                                     task.createdAt.toString().substring(0, 16),
-                                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                                    style: const TextStyle(
+                                        fontSize: 12, color: Colors.grey),
                                   ),
                                   // If task is completed and has doctor feedback, show it (read-only)
-                                  if (task.status == 'completed' && (task.doctorFeedback != null && task.doctorFeedback!.isNotEmpty)) ...[
+                                  if (task.status == 'completed' &&
+                                      (task.doctorFeedback != null &&
+                                          task.doctorFeedback!.isNotEmpty)) ...[
                                     const SizedBox(height: 8),
                                     Container(
                                       width: double.infinity,

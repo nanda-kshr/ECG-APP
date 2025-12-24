@@ -10,7 +10,10 @@ class TaskService {
   static Future<List<Task>> listTasks({
     String? status,
     int? doctorId,
-    int? technicianId,
+    int? userId,
+    String?
+        imageStatus, // 'pending', 'completed', 'closed', or null for non-closed
+    bool includeAllImages = false, // If true, don't filter by image status
     int limit = 50,
     int offset = 0,
   }) async {
@@ -19,7 +22,9 @@ class TaskService {
       'offset': offset.toString(),
       if (status != null) 'status': status,
       if (doctorId != null) 'doctor_id': doctorId.toString(),
-      if (technicianId != null) 'technician_id': technicianId.toString(),
+      if (userId != null) 'user_id': userId.toString(),
+      if (imageStatus != null) 'image_status': imageStatus,
+      if (includeAllImages) 'include_closed': '1',
     };
     final url = Uri.parse('${apiBase}list_tasks.php')
         .replace(queryParameters: queryParams);
@@ -164,10 +169,10 @@ class TaskService {
     }
   }
 
-  // Technician: create task for existing patient (JSON)
+  // User: create task for existing patient (JSON)
   static Future<Map<String, dynamic>> createTask({
     required int patientId,
-    required int technicianId,
+    required int userId,
     String notes = '',
     String priority = 'normal',
   }) async {
@@ -178,7 +183,7 @@ class TaskService {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'patient_id': patientId,
-          'technician_id': technicianId,
+          'user_id': userId,
           'notes': notes,
           'priority': priority,
         }),
@@ -196,10 +201,10 @@ class TaskService {
     }
   }
 
-  // Technician: create task for existing patient (Multipart with optional images)
+  // User: create task for existing patient (Multipart with optional images)
   static Future<Map<String, dynamic>> createTaskMultipart({
     required int patientId,
-    required int technicianId,
+    required int userId,
     String notes = '',
     String priority = 'normal',
     List<http.MultipartFile> files = const [],
@@ -207,16 +212,13 @@ class TaskService {
     final uri = Uri.parse('${apiBase}create_task.php');
     try {
       if (files.isEmpty) {
-        return {
-          'success': false,
-          'error': 'At least one image is required'
-        };
+        return {'success': false, 'error': 'At least one image is required'};
       }
       final req = http.MultipartRequest('POST', uri);
       req.fields['patient_id'] = patientId.toString();
-      req.fields['technician_id'] = technicianId.toString();
-      // API expects 'technician_notes' and file field 'image[]'
-      req.fields['technician_notes'] = notes;
+      req.fields['user_id'] = userId.toString();
+      // API expects 'user_notes' and file field 'image[]'
+      req.fields['user_notes'] = notes;
       req.fields['priority'] = priority;
       for (final f in files) {
         // Ensure field name matches API: image[]
@@ -272,11 +274,11 @@ class TaskService {
   // Get the count of pending ECG images
   static Future<int> getPendingImagesCount({
     int? doctorId,
-    int? technicianId,
+    int? userId,
   }) async {
     final queryParams = <String, String>{
       if (doctorId != null) 'doctor_id': doctorId.toString(),
-      if (technicianId != null) 'technician_id': technicianId.toString(),
+      if (userId != null) 'user_id': userId.toString(),
     };
     final url = Uri.parse('${apiBase}pending_images_count.php')
         .replace(queryParameters: queryParams);

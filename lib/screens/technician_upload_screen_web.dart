@@ -11,14 +11,14 @@ import '../models/patient.dart';
 import '../services/task_service.dart';
 import 'create_patient_screen.dart';
 
-class TechnicianUploadScreen extends StatefulWidget {
-  const TechnicianUploadScreen({super.key});
+class UserUploadScreen extends StatefulWidget {
+  const UserUploadScreen({super.key});
 
   @override
-  State<TechnicianUploadScreen> createState() => _TechnicianUploadScreenState();
+  State<UserUploadScreen> createState() => _UserUploadScreenState();
 }
 
-class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
+class _UserUploadScreenState extends State<UserUploadScreen> {
   final _formKey = GlobalKey<FormState>();
   final _notesController = TextEditingController();
   final _patientSearchController = TextEditingController();
@@ -47,7 +47,8 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
   MediaType _guessMediaType(html.File file) {
     String typeStr = '';
     try {
-      final dynamic t = (file as dynamic).type; // some browsers may yield undefined
+      final dynamic t =
+          (file as dynamic).type; // some browsers may yield undefined
       if (t != null) {
         final s = t.toString();
         if (s.isNotEmpty && s != 'undefined') {
@@ -231,7 +232,7 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
 
       final result = await TaskService.createTaskMultipart(
         patientId: _selectedPatient!.id,
-        technicianId: currentUser.id,
+        userId: currentUser.id,
         notes: _notesController.text.trim(),
         priority: _selectedPriority,
         files: files,
@@ -385,12 +386,15 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
                         ),
                         const SizedBox(width: 8),
                         ElevatedButton.icon(
-                          onPressed: (!_cameraReady || _isCapturing) ? null : _capturePhoto,
+                          onPressed: (!_cameraReady || _isCapturing)
+                              ? null
+                              : _capturePhoto,
                           icon: _isCapturing
                               ? const SizedBox(
                                   height: 18,
                                   width: 18,
-                                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                  child: CircularProgressIndicator(
+                                      strokeWidth: 2, color: Colors.white),
                                 )
                               : const Icon(Icons.camera_alt),
                           label: const Text('Capture'),
@@ -413,7 +417,8 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
                                   label: Text(file.name,
                                       overflow: TextOverflow.ellipsis),
                                   onDeleted: () {
-                                    setState(() => _selectedImages.remove(file));
+                                    setState(
+                                        () => _selectedImages.remove(file));
                                   },
                                 ))
                             .toList(),

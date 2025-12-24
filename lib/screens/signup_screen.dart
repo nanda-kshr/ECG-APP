@@ -5,7 +5,7 @@ import '../config.dart';
 
 class SignUpScreen extends StatefulWidget {
   // If forceRole is provided, the signup form will be locked to that role and
-  // the role selector will be hidden. Use this to allow only technician signups
+  // the role selector will be hidden. Use this to allow only user signups
   // from the home/login screen.
   final String? forceRole;
 
@@ -137,16 +137,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     const SizedBox(height: 16),
                     // If a forceRole was provided (e.g. from Login), lock the signup to that role
                     if (widget.forceRole == null) ...[
-                        DropdownButtonFormField<String>(
+                      DropdownButtonFormField<String>(
                         initialValue: role,
-                        items: ['doctor', 'technician']
-                          .map((r) => DropdownMenuItem(
-                              value: r,
-                              child: Text(r == 'technician'
-                                ? 'Clinic Doctor'
-                                : (r == 'doctor' ? 'Doctor' : r)),
-                            ))
-                          .toList(),
+                        items: ['doctor', 'user']
+                            .map((r) => DropdownMenuItem(
+                                  value: r,
+                                  child: Text(r == 'user'
+                                      ? 'Clinic Doctor'
+                                      : (r == 'doctor' ? 'Doctor' : r)),
+                                ))
+                            .toList(),
                         onChanged: (val) => setState(() => role = val),
                         decoration: InputDecoration(
                           labelText: 'Role',
@@ -159,7 +159,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ] else ...[
                       // Show a read-only field indicating the forced role
                       TextFormField(
-                        initialValue: widget.forceRole == 'technician'
+                        initialValue: widget.forceRole == 'user'
                             ? 'Clinic Doctor'
                             : (widget.forceRole == 'doctor'
                                 ? 'Doctor'
@@ -176,7 +176,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ],
                     if (_errorMessage != null) ...[
                       const SizedBox(height: 16),
-                      Text(_errorMessage!, style: const TextStyle(color: Colors.red)),
+                      Text(_errorMessage!,
+                          style: const TextStyle(color: Colors.red)),
                     ],
                     const SizedBox(height: 24),
                     SizedBox(
@@ -185,16 +186,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue[600],
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
                         ),
                         onPressed: _isLoading
                             ? null
                             : () {
-                                if (_formKey.currentState!.validate()) _register();
+                                if (_formKey.currentState!.validate())
+                                  _register();
                               },
                         child: _isLoading
-                            ? const CircularProgressIndicator(color: Colors.white)
-                            : const Text('Sign Up', style: TextStyle(fontSize: 18, color: Colors.white)),
+                            ? const CircularProgressIndicator(
+                                color: Colors.white)
+                            : const Text('Sign Up',
+                                style: TextStyle(
+                                    fontSize: 18, color: Colors.white)),
                       ),
                     ),
                   ],

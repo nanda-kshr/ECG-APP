@@ -38,7 +38,7 @@ class PatientService {
     int? age,
     String? gender,
     String? contact,
-    int? createdBy, // technician/admin id if required by backend
+    int? createdBy, // user/admin id if required by backend
   }) async {
     final url = Uri.parse('${apiBase}patients.php');
     try {
@@ -70,8 +70,7 @@ class PatientService {
         return {
           'success': true,
           if (decoded['id'] != null) 'id': decoded['id'],
-          if (decoded['patient_id'] != null)
-            'patient_id': decoded['patient_id']
+          if (decoded['patient_id'] != null) 'patient_id': decoded['patient_id']
         };
       }
       return {

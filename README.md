@@ -5,11 +5,11 @@ A comprehensive Flutter application for ECG image management with role-based acc
 ## Features
 
 ### 🔐 Authentication System
-- Role-based login (Technician, Admin, Doctor)
+- Role-based login (User, Admin, Doctor)
 - Secure session management
 - Demo credentials available
 
-### 👨‍⚕️ For Technicians
+### 👨‍⚕️ For Users
 - Upload ECG images via camera or gallery
 - Record voice notes for each image
 - Add patient information
@@ -31,7 +31,7 @@ A comprehensive Flutter application for ECG image management with role-based acc
 
 | Role | Username | Password |
 |------|----------|----------|
-| Technician | tech1 | password |
+| User | tech1 | password |
 | Admin | admin1 | password |
 | Doctor | doc1 | password |
 
@@ -96,7 +96,7 @@ lib/
 ## Usage
 
 1. **Login**: Use demo credentials or create your own
-2. **Technician Workflow**: Upload images → Record voice notes → Submit
+2. **User Workflow**: Upload images → Record voice notes → Submit
 3. **Admin Workflow**: Review submissions → Assign doctors → Monitor progress
 4. **Doctor Workflow**: Review cases → Provide diagnosis → Complete reviews
 

@@ -81,7 +81,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   IconData _getRoleIcon(UserRole role) {
     switch (role) {
-      case UserRole.technician:
+      case UserRole.user:
         return Icons.camera_alt;
       case UserRole.admin:
         return Icons.admin_panel_settings;
@@ -92,7 +92,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   String _getRoleDisplayName(UserRole role) {
     switch (role) {
-      case UserRole.technician:
+      case UserRole.user:
         return 'Clinic Doctor';
       case UserRole.admin:
         return 'Administrator';

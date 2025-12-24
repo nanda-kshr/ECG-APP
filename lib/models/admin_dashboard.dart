@@ -22,14 +22,12 @@ class Totals {
   final int users;
   final int admins;
   final int doctors;
-  final int technicians;
   final int reports;
 
   Totals({
     required this.users,
     required this.admins,
     required this.doctors,
-    required this.technicians,
     required this.reports,
   });
 
@@ -38,7 +36,6 @@ class Totals {
       users: int.tryParse(json['users']?.toString() ?? '0') ?? 0,
       admins: int.tryParse(json['admins']?.toString() ?? '0') ?? 0,
       doctors: int.tryParse(json['doctors']?.toString() ?? '0') ?? 0,
-      technicians: int.tryParse(json['technicians']?.toString() ?? '0') ?? 0,
       reports: int.tryParse(json['reports']?.toString() ?? '0') ?? 0,
     );
   }
@@ -48,14 +45,14 @@ class ReportItem {
   final String id;
   final String patientName;
   final String? result;
-  final String? technicianName;
+  final String? userName;
   final String createdAt;
 
   ReportItem({
     required this.id,
     required this.patientName,
     this.result,
-    this.technicianName,
+    this.userName,
     required this.createdAt,
   });
 
@@ -64,7 +61,7 @@ class ReportItem {
       id: json['id']?.toString() ?? '',
       patientName: json['patient_name'] ?? '',
       result: json['result'],
-      technicianName: json['technician_name'],
+      userName: json['user_name'],
       createdAt: json['created_at'] ?? '',
     );
   }

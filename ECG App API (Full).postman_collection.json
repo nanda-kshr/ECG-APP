@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "2a649271-1161-4279-983e-aa3587339f63",
 		"name": "ECG App API (Full)",
-		"description": "Postman collection covering all required ECG app APIs (technicians, doctors, duty management, patients, tasks).",
+		"description": "Postman collection covering all required ECG app APIs (users, doctors, duty management, patients, tasks).",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "44747720",
 		"_collection_link": "https://rahul-8020221.postman.co/workspace/Rahul's-Workspace~15efdaab-8105-4619-8dbf-ee442e9241cb/collection/44747720-2a649271-1161-4279-983e-aa3587339f63?action=share&source=collection_link&creator=44747720"
@@ -332,7 +332,7 @@
 					]
 				},
 				{
-					"name": "Login Technician",
+					"name": "Login User",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -357,7 +357,7 @@
 					},
 					"response": [
 						{
-							"name": "Login Technician",
+							"name": "Login User",
 							"originalRequest": {
 								"method": "POST",
 								"header": [
@@ -434,12 +434,12 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"success\": true,\n    \"user\": {\n        \"id\": 11,\n        \"email\": \"tech1@example.com\",\n        \"name\": \"Tech One\",\n        \"role\": \"technician\"\n    }\n}"
+							"body": "{\n    \"success\": true,\n    \"user\": {\n        \"id\": 11,\n        \"email\": \"tech1@example.com\",\n        \"name\": \"Tech One\",\n        \"role\": \"user\"\n    }\n}"
 						}
 					]
 				},
 				{
-					"name": "Register (Doctor/Technician)",
+					"name": "Register (Doctor/User)",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -464,7 +464,7 @@
 					},
 					"response": [
 						{
-							"name": "technician response",
+							"name": "user response",
 							"originalRequest": {
 								"method": "POST",
 								"header": [
@@ -475,7 +475,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"name\": \"New Tech\",\n  \"email\": \"newtech@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"technician\"\n}"
+									"raw": "{\n  \"name\": \"New Tech\",\n  \"email\": \"newtech@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"user\"\n}"
 								},
 								"url": {
 									"raw": "{{baseUrl}}/register.php",
@@ -628,20 +628,20 @@
 			]
 		},
 		{
-			"name": "Technicians",
+			"name": "Users",
 			"item": [
 				{
-					"name": "List Technicians",
+					"name": "List Users",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/technicians.php?search=&limit=50&offset=0",
+							"raw": "{{baseUrl}}/users.php?search=&limit=50&offset=0",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"technicians.php"
+								"users.php"
 							],
 							"query": [
 								{
@@ -661,17 +661,17 @@
 					},
 					"response": [
 						{
-							"name": "List Technicians",
+							"name": "List Users",
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/technicians.php?search=&limit=50&offset=0",
+									"raw": "{{baseUrl}}/users.php?search=&limit=50&offset=0",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"technicians.php"
+										"users.php"
 									],
 									"query": [
 										{
@@ -743,49 +743,49 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"success\": true,\n    \"technicians\": [\n        {\n            \"id\": 6,\n            \"name\": \"Test User\",\n            \"email\": \"useer@example.com\",\n            \"role\": \"technician\",\n            \"created_at\": \"2025-11-12 11:06:48\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Test User\",\n            \"email\": \"user@example.com\",\n            \"role\": \"technician\",\n            \"created_at\": \"2025-11-12 10:58:23\"\n        }\n    ]\n}"
+							"body": "{\n    \"success\": true,\n    \"users\": [\n        {\n            \"id\": 6,\n            \"name\": \"Test User\",\n            \"email\": \"useer@example.com\",\n            \"role\": \"user\",\n            \"created_at\": \"2025-11-12 11:06:48\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Test User\",\n            \"email\": \"user@example.com\",\n            \"role\": \"user\",\n            \"created_at\": \"2025-11-12 10:58:23\"\n        }\n    ]\n}"
 						}
 					]
 				},
 				{
-					"name": "Get Technician",
+					"name": "Get User",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/technicians.php?id={{technicianId}}",
+							"raw": "{{baseUrl}}/users.php?id={{userId}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"technicians.php"
+								"users.php"
 							],
 							"query": [
 								{
 									"key": "id",
-									"value": "{{technicianId}}"
+									"value": "{{userId}}"
 								}
 							]
 						}
 					},
 					"response": [
 						{
-							"name": "Get Technician",
+							"name": "Get User",
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/technicians.php?id={{technicianId}}",
+									"raw": "{{baseUrl}}/users.php?id={{userId}}",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"technicians.php"
+										"users.php"
 									],
 									"query": [
 										{
 											"key": "id",
-											"value": "{{technicianId}}"
+											"value": "{{userId}}"
 										}
 									]
 								}
@@ -844,12 +844,12 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"success\": true,\n    \"technician\": {\n        \"id\": 6,\n        \"name\": \"Test User\",\n        \"email\": \"useer@example.com\",\n        \"role\": \"technician\",\n        \"created_at\": \"2025-11-12 11:06:48\"\n    }\n}"
+							"body": "{\n    \"success\": true,\n    \"user\": {\n        \"id\": 6,\n        \"name\": \"Test User\",\n        \"email\": \"useer@example.com\",\n        \"role\": \"user\",\n        \"created_at\": \"2025-11-12 11:06:48\"\n    }\n}"
 						}
 					]
 				},
 				{
-					"name": "Create Technician",
+					"name": "Create User",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -863,18 +863,18 @@
 							"raw": "{\n  \"admin_id\": {{adminId}},\n  \"name\": \"Tech One\",\n  \"email\": \"tech1@example.com\",\n  \"password\": \"techpass\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/technicians.php",
+							"raw": "{{baseUrl}}/users.php",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"technicians.php"
+								"users.php"
 							]
 						}
 					},
 					"response": [
 						{
-							"name": "Create Technician",
+							"name": "Create User",
 							"originalRequest": {
 								"method": "POST",
 								"header": [
@@ -888,12 +888,12 @@
 									"raw": "{\n  \"admin_id\": {{adminId}},\n  \"name\": \"Tech One\",\n  \"email\": \"tech1@example.com\",\n  \"password\": \"techpass\"\n}"
 								},
 								"url": {
-									"raw": "{{baseUrl}}/technicians.php",
+									"raw": "{{baseUrl}}/users.php",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"technicians.php"
+										"users.php"
 									]
 								}
 							},
@@ -951,12 +951,12 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"success\": true,\n    \"technician_id\": 11\n}"
+							"body": "{\n    \"success\": true,\n    \"user_id\": 11\n}"
 						}
 					]
 				},
 				{
-					"name": "Update Technician",
+					"name": "Update User",
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -967,21 +967,21 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"admin_id\": {{adminId}},\n  \"id\": {{technicianId}},\n  \"name\": \"Tech One Updated\"\n}"
+							"raw": "{\n  \"admin_id\": {{adminId}},\n  \"id\": {{userId}},\n  \"name\": \"Tech One Updated\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/technicians.php",
+							"raw": "{{baseUrl}}/users.php",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"technicians.php"
+								"users.php"
 							]
 						}
 					},
 					"response": [
 						{
-							"name": "Update Technician",
+							"name": "Update User",
 							"originalRequest": {
 								"method": "PUT",
 								"header": [
@@ -992,15 +992,15 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"admin_id\": {{adminId}},\n  \"id\": {{technicianId}},\n  \"name\": \"Tech One Updated\"\n}"
+									"raw": "{\n  \"admin_id\": {{adminId}},\n  \"id\": {{userId}},\n  \"name\": \"Tech One Updated\"\n}"
 								},
 								"url": {
-									"raw": "{{baseUrl}}/technicians.php",
+									"raw": "{{baseUrl}}/users.php",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"technicians.php"
+										"users.php"
 									]
 								}
 							},
@@ -1063,7 +1063,7 @@
 					]
 				},
 				{
-					"name": "Delete Technician",
+					"name": "Delete User",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -1074,21 +1074,21 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"admin_id\": {{adminId}},\n  \"id\": {{technicianId}}\n}"
+							"raw": "{\n  \"admin_id\": {{adminId}},\n  \"id\": {{userId}}\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/technicians.php",
+							"raw": "{{baseUrl}}/users.php",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"technicians.php"
+								"users.php"
 							]
 						}
 					},
 					"response": [
 						{
-							"name": "Delete Technician",
+							"name": "Delete User",
 							"originalRequest": {
 								"method": "DELETE",
 								"header": [
@@ -1099,15 +1099,15 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"admin_id\": {{adminId}},\n  \"id\": {{technicianId}}\n}"
+									"raw": "{\n  \"admin_id\": {{adminId}},\n  \"id\": {{userId}}\n}"
 								},
 								"url": {
-									"raw": "{{baseUrl}}/technicians.php",
+									"raw": "{{baseUrl}}/users.php",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
-										"technicians.php"
+										"users.php"
 									]
 								}
 							},
@@ -2312,8 +2312,8 @@
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "technician_id",
-									"value": "{{technicianId}}",
+									"key": "user_id",
+									"value": "{{userId}}",
 									"type": "text"
 								},
 								{
@@ -2327,7 +2327,7 @@
 									"type": "text"
 								},
 								{
-									"key": "technician_notes",
+									"key": "user_notes",
 									"value": "Routine ECG",
 									"type": "text"
 								},
@@ -2358,8 +2358,8 @@
 									"mode": "formdata",
 									"formdata": [
 										{
-											"key": "technician_id",
-											"value": "{{technicianId}}",
+											"key": "user_id",
+											"value": "{{userId}}",
 											"type": "text"
 										},
 										{
@@ -2373,7 +2373,7 @@
 											"type": "text"
 										},
 										{
-											"key": "technician_notes",
+											"key": "user_notes",
 											"value": "Routine ECG",
 											"type": "text"
 										},
@@ -2667,15 +2667,15 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"success\": true,\n    \"tasks\": [\n        {\n            \"id\": 3,\n            \"patient_id\": 1,\n            \"technician_id\": 11,\n            \"assigned_doctor_id\": 14,\n            \"status\": \"assigned\",\n            \"priority\": \"normal\",\n            \"technician_notes\": \"Routine ECG\",\n            \"assigned_at\": \"2025-11-12 12:26:53\",\n            \"created_at\": \"2025-11-12 12:26:53\",\n            \"comment\": \"Initial upload\",\n            \"technician_name\": \"Tech One\",\n            \"technician_email\": \"tech1@example.com\",\n            \"doctor_name\": \"Dr. Example\",\n            \"doctor_email\": \"dr1@example.com\",\n            \"patient_name\": \"John Doe\",\n            \"patient_id_str\": \"PAT20251112001\",\n            \"patient_age\": 45\n        }\n    ],\n    \"count\": 1\n}"
+							"body": "{\n    \"success\": true,\n    \"tasks\": [\n        {\n            \"id\": 3,\n            \"patient_id\": 1,\n            \"user_id\": 11,\n            \"assigned_doctor_id\": 14,\n            \"status\": \"assigned\",\n            \"priority\": \"normal\",\n            \"user_notes\": \"Routine ECG\",\n            \"assigned_at\": \"2025-11-12 12:26:53\",\n            \"created_at\": \"2025-11-12 12:26:53\",\n            \"comment\": \"Initial upload\",\n            \"user_name\": \"Tech One\",\n            \"user_email\": \"tech1@example.com\",\n            \"doctor_name\": \"Dr. Example\",\n            \"doctor_email\": \"dr1@example.com\",\n            \"patient_name\": \"John Doe\",\n            \"patient_id_str\": \"PAT20251112001\",\n            \"patient_age\": 45\n        }\n    ],\n    \"count\": 1\n}"
 						},
 						{
-							"name": "list technicians tasks",
+							"name": "list users tasks",
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/list_tasks.php?status=assigned&limit=50&offset=0&technician_id=11",
+									"raw": "{{baseUrl}}/list_tasks.php?status=assigned&limit=50&offset=0&user_id=11",
 									"host": [
 										"{{baseUrl}}"
 									],
@@ -2701,7 +2701,7 @@
 											"value": "0"
 										},
 										{
-											"key": "technician_id",
+											"key": "user_id",
 											"value": "11"
 										}
 									]
@@ -2761,7 +2761,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"success\": true,\n    \"tasks\": [\n        {\n            \"id\": 7,\n            \"patient_id\": 1,\n            \"technician_id\": 11,\n            \"assigned_doctor_id\": 14,\n            \"status\": \"assigned\",\n            \"priority\": \"normal\",\n            \"technician_notes\": \"Routine ECG\",\n            \"assigned_at\": \"2025-11-12 12:29:37\",\n            \"created_at\": \"2025-11-12 12:29:37\",\n            \"comment\": null,\n            \"technician_name\": \"Tech One\",\n            \"technician_email\": \"tech1@example.com\",\n            \"doctor_name\": \"Dr. Example\",\n            \"doctor_email\": \"dr1@example.com\",\n            \"patient_name\": \"John Doe\",\n            \"patient_id_str\": \"PAT20251112001\",\n            \"patient_age\": 45\n        },\n        {\n            \"id\": 5,\n            \"patient_id\": 1,\n            \"technician_id\": 11,\n            \"assigned_doctor_id\": 14,\n            \"status\": \"assigned\",\n            \"priority\": \"normal\",\n            \"technician_notes\": \"Routine ECG\",\n            \"assigned_at\": \"2025-11-12 12:28:07\",\n            \"created_at\": \"2025-11-12 12:28:07\",\n            \"comment\": \"Initial upload\",\n            \"technician_name\": \"Tech One\",\n            \"technician_email\": \"tech1@example.com\",\n            \"doctor_name\": \"Dr. Example\",\n            \"doctor_email\": \"dr1@example.com\",\n            \"patient_name\": \"John Doe\",\n            \"patient_id_str\": \"PAT20251112001\",\n            \"patient_age\": 45\n        },\n        {\n            \"id\": 4,\n            \"patient_id\": 1,\n            \"technician_id\": 11,\n            \"assigned_doctor_id\": 14,\n            \"status\": \"assigned\",\n            \"priority\": \"normal\",\n            \"technician_notes\": \"Routine ECG\",\n            \"assigned_at\": \"2025-11-12 12:27:54\",\n            \"created_at\": \"2025-11-12 12:27:54\",\n            \"comment\": \"Initial upload\",\n            \"technician_name\": \"Tech One\",\n            \"technician_email\": \"tech1@example.com\",\n            \"doctor_name\": \"Dr. Example\",\n            \"doctor_email\": \"dr1@example.com\",\n            \"patient_name\": \"John Doe\",\n            \"patient_id_str\": \"PAT20251112001\",\n            \"patient_age\": 45\n        },\n        {\n            \"id\": 3,\n            \"patient_id\": 1,\n            \"technician_id\": 11,\n            \"assigned_doctor_id\": 14,\n            \"status\": \"assigned\",\n            \"priority\": \"normal\",\n            \"technician_notes\": \"Routine ECG\",\n            \"assigned_at\": \"2025-11-12 12:26:53\",\n            \"created_at\": \"2025-11-12 12:26:53\",\n            \"comment\": \"Initial upload\",\n            \"technician_name\": \"Tech One\",\n            \"technician_email\": \"tech1@example.com\",\n            \"doctor_name\": \"Dr. Example\",\n            \"doctor_email\": \"dr1@example.com\",\n            \"patient_name\": \"John Doe\",\n            \"patient_id_str\": \"PAT20251112001\",\n            \"patient_age\": 45\n        }\n    ],\n    \"count\": 4\n}"
+							"body": "{\n    \"success\": true,\n    \"tasks\": [\n        {\n            \"id\": 7,\n            \"patient_id\": 1,\n            \"user_id\": 11,\n            \"assigned_doctor_id\": 14,\n            \"status\": \"assigned\",\n            \"priority\": \"normal\",\n            \"user_notes\": \"Routine ECG\",\n            \"assigned_at\": \"2025-11-12 12:29:37\",\n            \"created_at\": \"2025-11-12 12:29:37\",\n            \"comment\": null,\n            \"user_name\": \"Tech One\",\n            \"user_email\": \"tech1@example.com\",\n            \"doctor_name\": \"Dr. Example\",\n            \"doctor_email\": \"dr1@example.com\",\n            \"patient_name\": \"John Doe\",\n            \"patient_id_str\": \"PAT20251112001\",\n            \"patient_age\": 45\n        },\n        {\n            \"id\": 5,\n            \"patient_id\": 1,\n            \"user_id\": 11,\n            \"assigned_doctor_id\": 14,\n            \"status\": \"assigned\",\n            \"priority\": \"normal\",\n            \"user_notes\": \"Routine ECG\",\n            \"assigned_at\": \"2025-11-12 12:28:07\",\n            \"created_at\": \"2025-11-12 12:28:07\",\n            \"comment\": \"Initial upload\",\n            \"user_name\": \"Tech One\",\n            \"user_email\": \"tech1@example.com\",\n            \"doctor_name\": \"Dr. Example\",\n            \"doctor_email\": \"dr1@example.com\",\n            \"patient_name\": \"John Doe\",\n            \"patient_id_str\": \"PAT20251112001\",\n            \"patient_age\": 45\n        },\n        {\n            \"id\": 4,\n            \"patient_id\": 1,\n            \"user_id\": 11,\n            \"assigned_doctor_id\": 14,\n            \"status\": \"assigned\",\n            \"priority\": \"normal\",\n            \"user_notes\": \"Routine ECG\",\n            \"assigned_at\": \"2025-11-12 12:27:54\",\n            \"created_at\": \"2025-11-12 12:27:54\",\n            \"comment\": \"Initial upload\",\n            \"user_name\": \"Tech One\",\n            \"user_email\": \"tech1@example.com\",\n            \"doctor_name\": \"Dr. Example\",\n            \"doctor_email\": \"dr1@example.com\",\n            \"patient_name\": \"John Doe\",\n            \"patient_id_str\": \"PAT20251112001\",\n            \"patient_age\": 45\n        },\n        {\n            \"id\": 3,\n            \"patient_id\": 1,\n            \"user_id\": 11,\n            \"assigned_doctor_id\": 14,\n            \"status\": \"assigned\",\n            \"priority\": \"normal\",\n            \"user_notes\": \"Routine ECG\",\n            \"assigned_at\": \"2025-11-12 12:26:53\",\n            \"created_at\": \"2025-11-12 12:26:53\",\n            \"comment\": \"Initial upload\",\n            \"user_name\": \"Tech One\",\n            \"user_email\": \"tech1@example.com\",\n            \"doctor_name\": \"Dr. Example\",\n            \"doctor_email\": \"dr1@example.com\",\n            \"patient_name\": \"John Doe\",\n            \"patient_id_str\": \"PAT20251112001\",\n            \"patient_age\": 45\n        }\n    ],\n    \"count\": 4\n}"
 						}
 					]
 				},
@@ -2991,11 +2991,21 @@
 						"header": [],
 						"url": {
 							"raw": "{{baseUrl}}/get_image.php?image_id=1&download=1",
-							"host": ["{{baseUrl}}"],
-							"path": ["get_image.php"],
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"get_image.php"
+							],
 							"query": [
-								{ "key": "image_id", "value": "1" },
-								{ "key": "download", "value": "1" }
+								{
+									"key": "image_id",
+									"value": "1"
+								},
+								{
+									"key": "download",
+									"value": "1"
+								}
 							]
 						}
 					},
@@ -3008,12 +3018,25 @@
 						"header": [],
 						"url": {
 							"raw": "{{baseUrl}}/get_task_images.php?task_id={{taskId}}&limit=10&offset=0",
-							"host": ["{{baseUrl}}"],
-							"path": ["get_task_images.php"],
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"get_task_images.php"
+							],
 							"query": [
-								{ "key": "task_id", "value": "{{taskId}}" },
-								{ "key": "limit", "value": "10" },
-								{ "key": "offset", "value": "0" }
+								{
+									"key": "task_id",
+									"value": "{{taskId}}"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
 							]
 						}
 					},
@@ -3025,12 +3048,25 @@
 								"header": [],
 								"url": {
 									"raw": "{{baseUrl}}/get_task_images.php?task_id=1&limit=10&offset=0",
-									"host": ["{{baseUrl}}"],
-									"path": ["get_task_images.php"],
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"get_task_images.php"
+									],
 									"query": [
-										{ "key": "task_id", "value": "1" },
-										{ "key": "limit", "value": "10" },
-										{ "key": "offset", "value": "0" }
+										{
+											"key": "task_id",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "10"
+										},
+										{
+											"key": "offset",
+											"value": "0"
+										}
 									]
 								}
 							},
@@ -3038,7 +3074,10 @@
 							"code": 200,
 							"_postman_previewlanguage": "json",
 							"header": [
-								{ "key": "Content-Type", "value": "application/json; charset=utf-8" }
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
 							],
 							"cookie": [],
 							"body": "{\n    \"success\": true,\n    \"images\": [\n        {\n            \"image_id\": 1,\n            \"image_name\": \"ecg_scan.jpg\",\n            \"image_path\": \"uploads/ecg_images/PAT20251112001_1731412613_0.jpg\",\n            \"image_url\": \"http://localhost/ecg_new/api/get_image.php?image_id=1&download=1\",\n            \"comment\": null,\n            \"created_at\": \"2025-11-12 12:26:53\",\n            \"status\": \"pending\",\n            \"file_size\": 125000,\n            \"mime_type\": \"image/jpeg\"\n        }\n    ],\n    \"count\": 1,\n    \"total\": 1,\n    \"patient_id\": 1\n}"
@@ -3052,12 +3091,25 @@
 						"header": [],
 						"url": {
 							"raw": "{{baseUrl}}/get_task_images.php?patient_id={{patientDbId}}&limit=10&offset=0",
-							"host": ["{{baseUrl}}"],
-							"path": ["get_task_images.php"],
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"get_task_images.php"
+							],
 							"query": [
-								{ "key": "patient_id", "value": "{{patientDbId}}" },
-								{ "key": "limit", "value": "10" },
-								{ "key": "offset", "value": "0" }
+								{
+									"key": "patient_id",
+									"value": "{{patientDbId}}"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
 							]
 						}
 					},
@@ -3073,13 +3125,24 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{ "key": "Content-Type", "value": "application/json" }
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"doctor_id\": {{doctorId}},\n  \"name\": \"PG User\",\n  \"email\": \"pg1@example.com\",\n  \"password\": \"pass12345\"\n}"
 						},
-						"url": { "raw": "{{baseUrl}}/pgs.php", "host": ["{{baseUrl}}"], "path": ["pgs.php"] }
+						"url": {
+							"raw": "{{baseUrl}}/pgs.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pgs.php"
+							]
+						}
 					},
 					"response": []
 				},
@@ -3090,11 +3153,21 @@
 						"header": [],
 						"url": {
 							"raw": "{{baseUrl}}/pgs.php?limit=50&offset=0",
-							"host": ["{{baseUrl}}"],
-							"path": ["pgs.php"],
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pgs.php"
+							],
 							"query": [
-								{ "key": "limit", "value": "50" },
-								{ "key": "offset", "value": "0" }
+								{
+									"key": "limit",
+									"value": "50"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
 							]
 						}
 					},
@@ -3107,9 +3180,18 @@
 						"header": [],
 						"url": {
 							"raw": "{{baseUrl}}/pgs.php?duty=1",
-							"host": ["{{baseUrl}}"],
-							"path": ["pgs.php"],
-							"query": [{ "key": "duty", "value": "1" }]
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pgs.php"
+							],
+							"query": [
+								{
+									"key": "duty",
+									"value": "1"
+								}
+							]
 						}
 					},
 					"response": []
@@ -3119,13 +3201,24 @@
 					"request": {
 						"method": "PUT",
 						"header": [
-							{ "key": "Content-Type", "value": "application/json" }
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"doctor_id\": {{doctorId}},\n  \"id\": {{pgId}},\n  \"name\": \"PG Updated\"\n}"
 						},
-						"url": { "raw": "{{baseUrl}}/pgs.php", "host": ["{{baseUrl}}"], "path": ["pgs.php"] }
+						"url": {
+							"raw": "{{baseUrl}}/pgs.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pgs.php"
+							]
+						}
 					},
 					"response": []
 				},
@@ -3134,13 +3227,24 @@
 					"request": {
 						"method": "PUT",
 						"header": [
-							{ "key": "Content-Type", "value": "application/json" }
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"doctor_id\": {{doctorId}},\n  \"id\": {{pgId}},\n  \"set_duty\": 1\n}"
 						},
-						"url": { "raw": "{{baseUrl}}/pgs.php", "host": ["{{baseUrl}}"], "path": ["pgs.php"] }
+						"url": {
+							"raw": "{{baseUrl}}/pgs.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pgs.php"
+							]
+						}
 					},
 					"response": []
 				},
@@ -3149,13 +3253,24 @@
 					"request": {
 						"method": "DELETE",
 						"header": [
-							{ "key": "Content-Type", "value": "application/json" }
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"doctor_id\": {{doctorId}},\n  \"id\": {{pgId}}\n}"
 						},
-						"url": { "raw": "{{baseUrl}}/pgs.php", "host": ["{{baseUrl}}"], "path": ["pgs.php"] }
+						"url": {
+							"raw": "{{baseUrl}}/pgs.php",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pgs.php"
+							]
+						}
 					},
 					"response": []
 				}
@@ -3201,7 +3316,7 @@
 			"type": "string"
 		},
 		{
-			"key": "technicianId",
+			"key": "userId",
 			"value": "3",
 			"type": "string"
 		},

@@ -56,7 +56,7 @@ class _AssignTaskScreenState extends State<AssignTaskScreen> {
 
     final result = await TaskService.createTask(
       patientId: _selectedPatient!.id,
-      technicianId: currentUser.id,
+      userId: currentUser.id,
       notes: _notesController.text.trim(),
       priority: _selectedPriority,
     );

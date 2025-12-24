@@ -1,12 +1,12 @@
 class Task {
   final int id;
   final int patientId;
-  final int technicianId;
+  final int userId;
   final int? assignedDoctorId;
   final int? assignedBy;
   final String status;
   final String priority;
-  final String? technicianNotes;
+  final String? userNotes;
   final String? adminNotes;
   final String? doctorFeedback;
   final DateTime? assignedAt;
@@ -14,8 +14,8 @@ class Task {
   final DateTime createdAt;
 
   // Joined fields
-  final String? technicianName;
-  final String? technicianEmail;
+  final String? userName;
+  final String? userEmail;
   final String? doctorName;
   final String? doctorEmail;
   final String? assignedByName;
@@ -28,19 +28,19 @@ class Task {
   Task({
     required this.id,
     required this.patientId,
-    required this.technicianId,
+    required this.userId,
     this.assignedDoctorId,
     this.assignedBy,
     required this.status,
     required this.priority,
-    this.technicianNotes,
+    this.userNotes,
     this.adminNotes,
     this.doctorFeedback,
     this.assignedAt,
     this.completedAt,
     required this.createdAt,
-    this.technicianName,
-    this.technicianEmail,
+    this.userName,
+    this.userEmail,
     this.doctorName,
     this.doctorEmail,
     this.assignedByName,
@@ -54,7 +54,7 @@ class Task {
     return Task(
       id: int.parse(json['id'].toString()),
       patientId: int.parse(json['patient_id'].toString()),
-      technicianId: int.parse(json['technician_id'].toString()),
+      userId: int.parse(json['user_id'].toString()),
       assignedDoctorId: json['assigned_doctor_id'] != null
           ? int.parse(json['assigned_doctor_id'].toString())
           : null,
@@ -63,9 +63,9 @@ class Task {
           : null,
       status: json['status']?.toString() ?? 'pending',
       priority: json['priority']?.toString() ?? 'normal',
-      technicianNotes: json['technician_notes']?.toString(),
+      userNotes: json['user_notes']?.toString(),
       adminNotes: json['admin_notes']?.toString(),
-        doctorFeedback: (json['doctor_feedback'] ?? json['comment'])?.toString(),
+      doctorFeedback: (json['doctor_feedback'] ?? json['comment'])?.toString(),
       assignedAt: json['assigned_at'] != null
           ? DateTime.tryParse(json['assigned_at'])
           : null,
@@ -73,8 +73,8 @@ class Task {
           ? DateTime.tryParse(json['completed_at'])
           : null,
       createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
-      technicianName: json['technician_name']?.toString(),
-      technicianEmail: json['technician_email']?.toString(),
+      userName: json['user_name']?.toString(),
+      userEmail: json['user_email']?.toString(),
       doctorName: json['doctor_name']?.toString(),
       doctorEmail: json['doctor_email']?.toString(),
       assignedByName: json['assigned_by_name']?.toString(),
@@ -83,14 +83,21 @@ class Task {
       patientAge: json['patient_age'] != null
           ? int.tryParse(json['patient_age'].toString())
           : null,
-        patientLastImages: (json['patient_last_images'] is List)
-            ? (json['patient_last_images'] as List)
-                .where((e) => e != null && e is Map)
-                .map((e) => PatientImage.fromJson(
-                    Map<String, dynamic>.from(e as Map)))
-                .toList()
-            : const [],
+      patientLastImages: _parseImages(json),
     );
+  }
+
+  static List<PatientImage> _parseImages(Map<String, dynamic> json) {
+    // New API uses 'images', legacy uses 'patient_last_images'
+    final imageList = json['images'] ?? json['patient_last_images'];
+    if (imageList is List) {
+      return imageList
+          .where((e) => e != null && e is Map)
+          .map(
+              (e) => PatientImage.fromJson(Map<String, dynamic>.from(e as Map)))
+          .toList();
+    }
+    return const [];
   }
 
   String get statusDisplay {
@@ -128,6 +135,7 @@ class Task {
 
 class PatientImage {
   final int imageId;
+  final int? taskId;
   final String imageName;
   final String? imagePath;
   final String? imageUrl;
@@ -137,6 +145,7 @@ class PatientImage {
 
   PatientImage({
     required this.imageId,
+    this.taskId,
     required this.imageName,
     this.imagePath,
     this.imageUrl,
@@ -148,6 +157,9 @@ class PatientImage {
   factory PatientImage.fromJson(Map<String, dynamic> json) {
     return PatientImage(
       imageId: int.parse(json['image_id'].toString()),
+      taskId: json['task_id'] != null
+          ? int.tryParse(json['task_id'].toString())
+          : null,
       imageName: json['image_name']?.toString() ?? '',
       imagePath: json['image_path']?.toString(),
       imageUrl: json['image_url']?.toString(),

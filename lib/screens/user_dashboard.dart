@@ -3,22 +3,22 @@ import '../services/auth_service.dart';
 import '../models/task.dart';
 import '../widgets/common_app_bar.dart';
 import 'login_screen.dart';
-import 'technician_upload_screen.dart';
+import 'user_upload_screen.dart';
 import 'task_detail_screen.dart';
+import 'patient_tasks_screen.dart';
 import '../services/task_service.dart';
 
-class TechnicianDashboard extends StatefulWidget {
-  const TechnicianDashboard({super.key});
+class UserDashboard extends StatefulWidget {
+  const UserDashboard({super.key});
 
   @override
-  State<TechnicianDashboard> createState() => _TechnicianDashboardState();
+  State<UserDashboard> createState() => _UserDashboardState();
 }
 
-class _TechnicianDashboardState extends State<TechnicianDashboard> {
+class _UserDashboardState extends State<UserDashboard> {
   List<Task> _tasks = [];
   bool _loading = true;
   String? _error;
-  
 
   @override
   void initState() {
@@ -35,7 +35,10 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
       _error = null;
     });
     try {
-      final tasks = await TaskService.listTasks(technicianId: currentUser.id);
+      final tasks = await TaskService.listTasks(
+        userId: currentUser.id,
+        includeAllImages: true, // Show closed tasks to clinic doctor
+      );
       setState(() {
         _tasks = tasks;
         _loading = false;
@@ -52,10 +55,19 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
   int get _feedbackReceivedCount => _tasks.fold(
       0,
       (sum, task) =>
-          sum + task.patientLastImages.where((img) => img.status == 'completed').length);
+          sum +
+          task.patientLastImages
+              .where((img) => img.status == 'completed')
+              .length);
   int get _underReviewCount => _tasks
       .where((t) => t.status == 'assigned' || t.status == 'in_progress')
-      .fold(0, (sum, task) => sum + task.patientLastImages.where((img) => img.status != 'completed').length);
+      .fold(
+          0,
+          (sum, task) =>
+              sum +
+              task.patientLastImages
+                  .where((img) => img.status != 'completed')
+                  .length);
 
   void _navigateToUpload() async {
     // Always show consent dialog when user taps Upload
@@ -64,7 +76,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
 
     final result = await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const TechnicianUploadScreen(),
+        builder: (context) => const UserUploadScreen(),
       ),
     );
     if (result == true) {
@@ -85,11 +97,14 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Please review and accept the terms below before capturing an ECG image.'),
+                  const Text(
+                      'Please review and accept the terms below before capturing an ECG image.'),
                   const SizedBox(height: 12),
-                  const Text('Sending of case for opinion is purely voluntary.'),
+                  const Text(
+                      'Sending of case for opinion is purely voluntary.'),
                   const SizedBox(height: 8),
-                  const Text('The opinion expressed has to be analysed in context of the symptoms & signed by the treating physician.'),
+                  const Text(
+                      'The opinion expressed has to be analysed in context of the symptoms & signs by the treating physician.'),
                   const SizedBox(height: 12),
                   Row(
                     children: [
@@ -101,7 +116,8 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                       ),
                       const SizedBox(width: 8),
                       const Expanded(
-                        child: Text('I agree to the terms and consent to submit ECG images.'),
+                        child: Text(
+                            'I agree to the terms and consent to submit ECG images.'),
                       ),
                     ],
                   ),
@@ -114,7 +130,8 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                 child: const Text('Cancel'),
               ),
               ElevatedButton(
-                onPressed: _agreed ? () => Navigator.of(context).pop(true) : null,
+                onPressed:
+                    _agreed ? () => Navigator.of(context).pop(true) : null,
                 child: const Text('Agree & Capture ECG'),
               ),
             ],
@@ -152,15 +169,21 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                 child: Builder(builder: (context) {
                   final uploadAllowed = _isUploadAllowed();
                   return ElevatedButton.icon(
-                    onPressed: uploadAllowed ? _navigateToUpload : () => _showUploadDisabledSnackbar(context),
+                    onPressed: uploadAllowed
+                        ? _navigateToUpload
+                        : () => _showUploadDisabledSnackbar(context),
                     icon: const Icon(Icons.upload_file, size: 32),
                     label: Text(
-                      uploadAllowed ? 'Upload ECG' : 'Upload\n(Mon–Fri, 8–3 PM IST)',
+                      uploadAllowed
+                          ? 'Upload ECG'
+                          : 'Upload\n(Mon–Fri, 8–3 PM IST)',
                       textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: uploadAllowed ? Colors.green : Colors.grey,
+                      backgroundColor:
+                          uploadAllowed ? Colors.green : Colors.grey,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -202,7 +225,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Uploaded Patient Records',
+                  const Text('Patient Records',
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   Text('${_tasks.length} tasks',
@@ -222,13 +245,30 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
               else if (_tasks.isEmpty)
                 _buildEmptyState()
               else
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _tasks.length,
-                  itemBuilder: (context, index) {
-                    final task = _tasks[index];
-                    return _buildTaskCard(task);
+                Builder(
+                  builder: (context) {
+                    // Group tasks by Patient ID
+                    final groupedTasks = <int, List<Task>>{};
+                    for (var task in _tasks) {
+                      groupedTasks
+                          .putIfAbsent(task.patientId, () => [])
+                          .add(task);
+                    }
+
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: groupedTasks.length,
+                      itemBuilder: (context, index) {
+                        final patientId = groupedTasks.keys.elementAt(index);
+                        final tasks = groupedTasks[patientId]!;
+                        // Sort tasks by newest first
+                        tasks
+                            .sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+                        return _buildPatientCard(tasks);
+                      },
+                    );
                   },
                 ),
             ],
@@ -398,9 +438,6 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
                   const SizedBox(width: 4),
                   Text(task.createdAt.toString().substring(0, 16),
                       style: TextStyle(fontSize: 12, color: Colors.grey[600])),
-                  const SizedBox(width: 16),
-                  // Text('Priority: ${task.priorityDisplay}',
-                  //     style: TextStyle(fontSize: 12, color: Colors.grey[600])),
                 ],
               ),
               if (hasFeedback) ...[
@@ -437,7 +474,8 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
   }
 
   bool _isUploadAllowed() {
-    final ist = DateTime.now().toUtc().add(const Duration(hours: 5, minutes: 30));
+    final ist =
+        DateTime.now().toUtc().add(const Duration(hours: 5, minutes: 30));
     final weekday = ist.weekday; // 1 = Monday
     if (weekday < DateTime.monday || weekday > DateTime.friday) return false;
     final hour = ist.hour;
@@ -445,7 +483,8 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
   }
 
   void _showUploadDisabledSnackbar(BuildContext context) {
-    final ist = DateTime.now().toUtc().add(const Duration(hours: 5, minutes: 30));
+    final ist =
+        DateTime.now().toUtc().add(const Duration(hours: 5, minutes: 30));
     // final timeStr = '${ist.hour.toString().padLeft(2, '0')}:${ist.minute.toString().padLeft(2, '0')} IST';
     // ScaffoldMessenger.of(context).showSnackBar(
     //   SnackBar(content: Text('Uploads allowed Mon–Fri 08:00–15:00 IST. Current IST time: $timeStr')),
@@ -485,5 +524,154 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
         ),
       ),
     );
+  }
+
+  Widget _buildPatientCard(List<Task> tasks) {
+    if (tasks.isEmpty) return const SizedBox.shrink();
+
+    final patientName = tasks.first.patientName ?? 'Unknown';
+    final patientIdStr = tasks.first.patientIdStr ?? 'N/A';
+    final totalImages =
+        tasks.fold<int>(0, (sum, t) => sum + t.patientLastImages.length);
+    final pendingCount = tasks
+        .expand((t) => t.patientLastImages)
+        .where((i) => i.status == 'pending')
+        .length;
+    final latestTask = tasks.first; // Already sorted by date
+
+    return Card(
+      elevation: 2,
+      margin: const EdgeInsets.only(bottom: 12),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: InkWell(
+        onTap: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PatientTasksScreen(
+                tasks: tasks,
+                patientName: patientName,
+                patientIdStr: patientIdStr,
+              ),
+            ),
+          );
+          _loadTasks();
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 24,
+                backgroundColor: Colors.blue.shade50,
+                child: Text(
+                  _getInitials(patientName),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue.shade700,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      patientName,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'ID: $patientIdStr',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Last upload: ${_formatDate(latestTask.createdAt)}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: pendingCount > 0
+                          ? Colors.orange.shade50
+                          : Colors.green.shade50,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: pendingCount > 0
+                            ? Colors.orange.shade200
+                            : Colors.green.shade200,
+                      ),
+                    ),
+                    child: Text(
+                      pendingCount > 0 ? '$pendingCount Pending' : 'Reviewed',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: pendingCount > 0
+                            ? Colors.orange.shade700
+                            : Colors.green.shade700,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '${tasks.length} Records',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 8),
+              Icon(
+                Icons.chevron_right,
+                color: Colors.grey.shade400,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _formatDate(DateTime? dateTime) {
+    if (dateTime == null) return '';
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    return '${months[dateTime.month - 1]} ${dateTime.day}';
   }
 }

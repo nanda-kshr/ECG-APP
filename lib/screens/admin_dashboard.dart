@@ -8,6 +8,7 @@ import 'admin_profile_screen.dart';
 import '../models/task.dart';
 import '../services/task_service.dart';
 import 'task_detail_screen.dart';
+import 'patient_tasks_screen.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
@@ -101,9 +102,22 @@ class _AdminHomeTabState extends State<AdminHomeTab> {
   bool _loading = true;
   String? _errorText;
 
-  int get _totalTasks => _recentTasks.fold(0, (sum, task) => sum + task.patientLastImages.length);
-  int get _pendingTasks => _recentTasks.fold(0, (sum, task) => sum + task.patientLastImages.where((img) => img.status != 'completed').length);
-  int get _completedTasks => _recentTasks.fold(0, (sum, task) => sum + task.patientLastImages.where((img) => img.status == 'completed').length);
+  int get _totalTasks =>
+      _recentTasks.fold(0, (sum, task) => sum + task.patientLastImages.length);
+  int get _pendingTasks => _recentTasks.fold(
+      0,
+      (sum, task) =>
+          sum +
+          task.patientLastImages
+              .where((img) => img.status != 'completed')
+              .length);
+  int get _completedTasks => _recentTasks.fold(
+      0,
+      (sum, task) =>
+          sum +
+          task.patientLastImages
+              .where((img) => img.status == 'completed')
+              .length);
 
   @override
   void initState() {
@@ -116,7 +130,8 @@ class _AdminHomeTabState extends State<AdminHomeTab> {
     try {
       final admin_model.AdminDashboard? data =
           await AdminService.fetchDashboard();
-      final tasks = await TaskService.listTasks(limit: 100); // get more tasks for stats
+      final tasks =
+          await TaskService.listTasks(limit: 100); // get more tasks for stats
       setState(() {
         _dashboard = data;
         _recentTasks = tasks;
@@ -226,19 +241,37 @@ class _AdminHomeTabState extends State<AdminHomeTab> {
                           ? const Center(
                               child: Padding(
                                 padding: EdgeInsets.all(32.0),
-                                child: Text('No pending tasks',
+                                child: Text('No pending patients',
                                     style: TextStyle(color: Colors.grey)),
                               ),
                             )
-                          : ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: _recentTasks.where((t) => t.status == 'pending').length > 10
-                                  ? 10
-                                  : _recentTasks.where((t) => t.status == 'pending').length,
-                              itemBuilder: (context, index) {
-                                final task = _recentTasks.where((t) => t.status == 'pending').toList()[index];
-                                return _buildTaskCardCompact(task);
+                          : Builder(
+                              builder: (context) {
+                                // Group tasks by Patient ID
+                                final pendingTasks = _recentTasks
+                                    .where((t) => t.status == 'pending')
+                                    .toList();
+                                final groupedTasks = <int, List<Task>>{};
+                                for (var task in pendingTasks) {
+                                  groupedTasks
+                                      .putIfAbsent(task.patientId, () => [])
+                                      .add(task);
+                                }
+                                final patientIds =
+                                    groupedTasks.keys.take(10).toList();
+
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: patientIds.length,
+                                  itemBuilder: (context, index) {
+                                    final patientId = patientIds[index];
+                                    final tasks = groupedTasks[patientId]!;
+                                    tasks.sort((a, b) =>
+                                        b.createdAt.compareTo(a.createdAt));
+                                    return _buildPatientCard(tasks);
+                                  },
+                                );
                               },
                             ),
                       const SizedBox(height: 16),
@@ -282,7 +315,7 @@ class _AdminHomeTabState extends State<AdminHomeTab> {
             ),
             const SizedBox(height: 4),
             Text(
-              'Clinic Doctor: ${task.technicianName ?? 'Unknown'}${task.doctorName != null ? '  •  Doctor: ${task.doctorName}' : ''}',
+              'Clinic Doctor: ${task.userName ?? 'Unknown'}${task.doctorName != null ? '  •  Doctor: ${task.doctorName}' : ''}',
               style: TextStyle(fontSize: 12, color: Colors.grey[600]),
             ),
           ],
@@ -342,5 +375,154 @@ class _AdminHomeTabState extends State<AdminHomeTab> {
         ),
       ),
     );
+  }
+
+  Widget _buildPatientCard(List<Task> tasks) {
+    if (tasks.isEmpty) return const SizedBox.shrink();
+
+    final patientName = tasks.first.patientName ?? 'Unknown';
+    final patientIdStr = tasks.first.patientIdStr ?? 'N/A';
+    final pendingCount = tasks
+        .expand((t) => t.patientLastImages)
+        .where((i) => i.status == 'pending')
+        .length;
+    final latestTask = tasks.first;
+
+    return Card(
+      elevation: 2,
+      margin: const EdgeInsets.only(bottom: 12),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: InkWell(
+        onTap: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PatientTasksScreen(
+                tasks: tasks,
+                patientName: patientName,
+                patientIdStr: patientIdStr,
+              ),
+            ),
+          );
+          _load();
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 24,
+                backgroundColor: Colors.blue.shade50,
+                child: Text(
+                  _getInitials(patientName),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue.shade700,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      patientName,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'ID: $patientIdStr',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Last update: ${_formatDate(latestTask.createdAt)}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: pendingCount > 0
+                          ? Colors.orange.shade50
+                          : Colors.green.shade50,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: pendingCount > 0
+                            ? Colors.orange.shade200
+                            : Colors.green.shade200,
+                      ),
+                    ),
+                    child: Text(
+                      pendingCount > 0
+                          ? '$pendingCount Pending'
+                          : 'All Reviewed',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: pendingCount > 0
+                            ? Colors.orange.shade700
+                            : Colors.green.shade700,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '${tasks.length} Records',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 8),
+              Icon(
+                Icons.chevron_right,
+                color: Colors.grey.shade400,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _formatDate(DateTime? dateTime) {
+    if (dateTime == null) return '';
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    return '${months[dateTime.month - 1]} ${dateTime.day}';
   }
 }

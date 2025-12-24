@@ -1,4 +1,4 @@
-enum UserRole { technician, admin, doctor, pg }
+enum UserRole { user, admin, doctor, pg }
 
 class User {
   final int id;
@@ -33,7 +33,7 @@ class User {
       password: '', // Do not store password from API
       role: UserRole.values.firstWhere(
         (e) => e.name == json['role'],
-        orElse: () => UserRole.technician,
+        orElse: () => UserRole.user,
       ),
       name: (json['name'] ?? '').toString(),
     );

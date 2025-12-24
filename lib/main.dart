@@ -4,7 +4,7 @@ import 'services/push_service.dart';
 import 'services/task_service.dart';
 import 'screens/task_detail_screen.dart';
 import 'screens/login_screen.dart';
-import 'screens/technician_dashboard.dart';
+import 'screens/user_dashboard.dart';
 import 'screens/admin_dashboard.dart';
 import 'screens/doctor_dashboard.dart';
 import 'models/user.dart';
@@ -149,8 +149,8 @@ class _SplashScreenState extends State<SplashScreen> {
     if (user != null) {
       Widget screen;
       switch (user.role) {
-        case UserRole.technician:
-          screen = const TechnicianDashboard();
+        case UserRole.user:
+          screen = const UserDashboard();
           break;
         case UserRole.admin:
           screen = const AdminDashboard();
@@ -182,8 +182,8 @@ class _SplashScreenState extends State<SplashScreen> {
     Widget screen;
 
     switch (user.role) {
-      case UserRole.technician:
-        screen = const TechnicianDashboard();
+      case UserRole.user:
+        screen = const UserDashboard();
         break;
       case UserRole.admin:
         screen = const AdminDashboard();

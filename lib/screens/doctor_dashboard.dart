@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../services/pg_service.dart';
 import 'task_detail_screen.dart';
+import 'patient_tasks_screen.dart';
 
 class DoctorDashboard extends StatefulWidget {
   const DoctorDashboard({Key? key}) : super(key: key);
@@ -36,8 +37,6 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
     _loadPGs();
   }
 
-
-
   Future<void> _loadAssignedTasks() async {
     setState(() {
       _loading = true;
@@ -52,12 +51,12 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
         });
         return;
       }
-      
+
       // If PG, load tasks assigned to this PG; otherwise load by doctor_id
       final tasks = currentUser.role.name == 'pg'
           ? await TaskService.listDutyTasks(pgId: currentUser.id)
           : await TaskService.listDutyTasks(doctorId: currentUser.id);
-      
+
       setState(() {
         _tasks = tasks;
         _loading = false;
@@ -83,7 +82,7 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
       search: search,
       createdBy: currentUser.id,
     );
-    
+
     if (mounted) {
       setState(() {
         _loadingPGs = false;
@@ -169,13 +168,16 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
               }
               if (name.length < 2 || name.length > 100) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Name must be 2-100 characters')),
+                  const SnackBar(
+                      content: Text('Name must be 2-100 characters')),
                 );
                 return;
               }
               if (!RegExp(r'^[a-zA-Z\s.]+$').hasMatch(name)) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Name can only contain letters, spaces, and dots')),
+                  const SnackBar(
+                      content: Text(
+                          'Name can only contain letters, spaces, and dots')),
                 );
                 return;
               }
@@ -191,7 +193,8 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                 r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
               ).hasMatch(email)) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Please enter a valid email address')),
+                  const SnackBar(
+                      content: Text('Please enter a valid email address')),
                 );
                 return;
               }
@@ -205,25 +208,29 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
               }
               if (password.length < 8) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Password must be at least 8 characters')),
+                  const SnackBar(
+                      content: Text('Password must be at least 8 characters')),
                 );
                 return;
               }
               if (!RegExp(r'[a-z]').hasMatch(password)) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Password must contain lowercase letters')),
+                  const SnackBar(
+                      content: Text('Password must contain lowercase letters')),
                 );
                 return;
               }
               if (!RegExp(r'[A-Z]').hasMatch(password)) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Password must contain uppercase letters')),
+                  const SnackBar(
+                      content: Text('Password must contain uppercase letters')),
                 );
                 return;
               }
               if (!RegExp(r'[0-9]').hasMatch(password)) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Password must contain numbers')),
+                  const SnackBar(
+                      content: Text('Password must contain numbers')),
                 );
                 return;
               }
@@ -471,13 +478,16 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
               }
               if (name.length < 2 || name.length > 100) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Name must be 2-100 characters')),
+                  const SnackBar(
+                      content: Text('Name must be 2-100 characters')),
                 );
                 return;
               }
               if (!RegExp(r'^[a-zA-Z\s.]+$').hasMatch(name)) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Name can only contain letters, spaces, and dots')),
+                  const SnackBar(
+                      content: Text(
+                          'Name can only contain letters, spaces, and dots')),
                 );
                 return;
               }
@@ -493,7 +503,8 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                 r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
               ).hasMatch(email)) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Please enter a valid email address')),
+                  const SnackBar(
+                      content: Text('Please enter a valid email address')),
                 );
                 return;
               }
@@ -624,6 +635,7 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
     }
     return count;
   }
+
   int get _completed {
     int count = 0;
     for (var task in _tasks) {
@@ -703,25 +715,25 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                   _buildPGManagementSection(),
                   const SizedBox(height: 24),
                 ],
-                 Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                   children: [
-                     const Text(
-                       'Assigned Patients',
-                       style: TextStyle(
-                         fontSize: 20,
-                         fontWeight: FontWeight.bold,
-                       ),
-                     ),
-                     Text(
-                       '${_tasks.length} tasks',
-                       style: TextStyle(
-                         fontSize: 14,
-                         color: Colors.grey[600],
-                       ),
-                     ),
-                   ],
-                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Assigned Patients',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      '${_tasks.length} tasks',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 12),
                 if (_loading)
                   _buildLoading()
@@ -731,16 +743,34 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                           style: const TextStyle(color: Colors.red)))
                 else if (_tasks.isEmpty)
                   _buildEmptyState()
-                else
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: _tasks.length,
-                    itemBuilder: (context, index) {
-                      final task = _tasks[index];
-                      return _buildTaskCard(task);
+                else ...[
+                  // Group tasks by Patient ID
+                  Builder(
+                    builder: (context) {
+                      final groupedTasks = <int, List<Task>>{};
+                      for (var task in _tasks) {
+                        groupedTasks
+                            .putIfAbsent(task.patientId, () => [])
+                            .add(task);
+                      }
+
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: groupedTasks.length,
+                        itemBuilder: (context, index) {
+                          final patientId = groupedTasks.keys.elementAt(index);
+                          final tasks = groupedTasks[patientId]!;
+                          // Sort tasks by newest first
+                          tasks.sort(
+                              (a, b) => b.createdAt.compareTo(a.createdAt));
+
+                          return _buildPatientCard(tasks);
+                        },
+                      );
                     },
                   ),
+                ],
                 const SizedBox(height: 12),
               ],
             ),
@@ -801,7 +831,8 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                       )
                     : null,
                 border: const OutlineInputBorder(),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               ),
               onChanged: (value) {
                 setState(() {
@@ -868,7 +899,8 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                   scrollDirection: Axis.horizontal,
                   itemCount: _pgs.length,
                   itemBuilder: (context, index) {
-                    final sortedPgs = _pgs.toList()..sort((a, b) => b.isDuty ? 1 : -1);
+                    final sortedPgs = _pgs.toList()
+                      ..sort((a, b) => b.isDuty ? 1 : -1);
                     final pg = sortedPgs[index];
                     // Minimal horizontal PG chip
                     return Padding(
@@ -878,21 +910,33 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                         borderRadius: BorderRadius.circular(12),
                         child: Container(
                           width: 160,
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 10),
                           decoration: BoxDecoration(
-                            color: pg.isDuty ? Colors.green.withOpacity(0.08) : Colors.grey.withOpacity(0.03),
+                            color: pg.isDuty
+                                ? Colors.green.withOpacity(0.08)
+                                : Colors.grey.withOpacity(0.03),
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: pg.isDuty ? Colors.green.withOpacity(0.18) : Colors.grey.withOpacity(0.12)),
+                            border: Border.all(
+                                color: pg.isDuty
+                                    ? Colors.green.withOpacity(0.18)
+                                    : Colors.grey.withOpacity(0.12)),
                           ),
                           child: Row(
                             children: [
                               CircleAvatar(
                                 radius: 18,
-                                backgroundColor: pg.isDuty ? Colors.green.shade100 : Colors.blue.shade50,
+                                backgroundColor: pg.isDuty
+                                    ? Colors.green.shade100
+                                    : Colors.blue.shade50,
                                 child: Text(
-                                  pg.name.isNotEmpty ? pg.name[0].toUpperCase() : 'P',
+                                  pg.name.isNotEmpty
+                                      ? pg.name[0].toUpperCase()
+                                      : 'P',
                                   style: TextStyle(
-                                    color: pg.isDuty ? Colors.green.shade700 : Colors.blue.shade700,
+                                    color: pg.isDuty
+                                        ? Colors.green.shade700
+                                        : Colors.blue.shade700,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
@@ -905,14 +949,18 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                                   children: [
                                     Text(
                                       pg.name,
-                                      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 13),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     const SizedBox(height: 2),
                                     Text(
                                       pg.email,
-                                      style: TextStyle(fontSize: 11, color: Colors.grey[600]),
+                                      style: TextStyle(
+                                          fontSize: 11,
+                                          color: Colors.grey[600]),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -922,7 +970,8 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                               if (pg.isDuty)
                                 Padding(
                                   padding: const EdgeInsets.only(left: 8.0),
-                                  child: Icon(Icons.circle, color: Colors.green.shade400, size: 10),
+                                  child: Icon(Icons.circle,
+                                      color: Colors.green.shade400, size: 10),
                                 ),
                             ],
                           ),
@@ -1071,7 +1120,7 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                   Icon(Icons.assignment_ind, size: 14, color: Colors.grey[600]),
                   const SizedBox(width: 4),
                   Text(
-                    'Technician: ${task.technicianName ?? 'Unknown'}',
+                    'Doctor ${task.userName ?? 'Unknown'}',
                     style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                   ),
                 ],
@@ -1089,25 +1138,30 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.check_circle, size: 16, color: Colors.green),
+                          const Icon(Icons.check_circle,
+                              size: 16, color: Colors.green),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
                               'Reviewed',
-                              style: TextStyle(fontSize: 13, color: Colors.green[700]),
+                              style: TextStyle(
+                                  fontSize: 13, color: Colors.green[700]),
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 8),
-                      if (task.status == 'completed' && (task.doctorFeedback != null && task.doctorFeedback!.isNotEmpty))
+                      if (task.status == 'completed' &&
+                          (task.doctorFeedback != null &&
+                              task.doctorFeedback!.isNotEmpty))
                         Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: Colors.green.withOpacity(0.12)),
+                            border: Border.all(
+                                color: Colors.green.withOpacity(0.12)),
                           ),
                           child: Text(
                             task.doctorFeedback!,
@@ -1156,4 +1210,150 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
     );
   }
 
+  Widget _buildPatientCard(List<Task> tasks) {
+    if (tasks.isEmpty) return const SizedBox.shrink();
+
+    final patientName = tasks.first.patientName ?? 'Unknown';
+    final patientIdStr = tasks.first.patientIdStr ?? 'N/A';
+    final pendingCount = tasks
+        .expand((t) => t.patientLastImages)
+        .where((i) => i.status == 'pending')
+        .length;
+    final latestTask = tasks.first; // Already sorted by date
+
+    return Card(
+      elevation: 2,
+      margin: const EdgeInsets.only(bottom: 12),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PatientTasksScreen(
+                tasks: tasks,
+                patientName: patientName,
+                patientIdStr: patientIdStr,
+              ),
+            ),
+          );
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 24,
+                backgroundColor: Colors.blue.shade50,
+                child: Text(
+                  _getInitials(patientName),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue.shade700,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      patientName,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'ID: $patientIdStr',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Last update: ${_formatDate(latestTask.createdAt)}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: pendingCount > 0
+                          ? Colors.orange.shade50
+                          : Colors.green.shade50,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: pendingCount > 0
+                            ? Colors.orange.shade200
+                            : Colors.green.shade200,
+                      ),
+                    ),
+                    child: Text(
+                      pendingCount > 0 ? '$pendingCount Pending' : 'Reviewed',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: pendingCount > 0
+                            ? Colors.orange.shade700
+                            : Colors.green.shade700,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '${tasks.length} Records',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 8),
+              Icon(
+                Icons.chevron_right,
+                color: Colors.grey.shade400,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Helper method for formatting date locally if needed
+  String _formatDate(DateTime? dateTime) {
+    if (dateTime == null) return '';
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    return '${months[dateTime.month - 1]} ${dateTime.day}';
+  }
 }

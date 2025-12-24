@@ -7,7 +7,7 @@ import 'signup_screen.dart';
 import '../models/user.dart';
 import 'admin_dashboard.dart';
 import 'doctor_dashboard.dart';
-import 'technician_dashboard.dart';
+import 'user_dashboard.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key}); // Add const constructor
@@ -62,8 +62,8 @@ class _LoginScreenState extends State<LoginScreen> {
     Widget screen;
 
     switch (user.role) {
-      case UserRole.technician:
-        screen = const TechnicianDashboard();
+      case UserRole.user:
+        screen = const UserDashboard();
         break;
       case UserRole.admin:
         screen = const AdminDashboard();
@@ -151,10 +151,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 if (_formKey.currentState!.validate()) _login();
                               },
                         child: _isLoading
-                          ? const CircularProgressIndicator(
-                            color: Colors.white)
-                          : const Text('Sign In',
-                            style: TextStyle(fontSize: 18, color: Colors.white)),
+                            ? const CircularProgressIndicator(
+                                color: Colors.white)
+                            : const Text('Sign In',
+                                style: TextStyle(
+                                    fontSize: 18, color: Colors.white)),
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -168,13 +169,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         icon: const Icon(Icons.person_add, size: 18),
                         label: Text('Sign Up',
-                            style: TextStyle(fontSize: 14, color: Colors.blue[600])),
+                            style: TextStyle(
+                                fontSize: 14, color: Colors.blue[600])),
                         onPressed: () {
-                          // Only allow technician self-signup from the login screen.
+                          // Only allow user self-signup from the login screen.
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (context) => const SignUpScreen(
-                                    forceRole: 'technician')),
+                                builder: (context) =>
+                                    const SignUpScreen(forceRole: 'user')),
                           );
                         },
                       ),

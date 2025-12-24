@@ -1,6 +1,6 @@
 class EcgImage {
   final String id;
-  final String technicianId;
+  final String userId;
   final String imagePath;
   final String voiceNotePath;
   final DateTime uploadedAt;
@@ -11,7 +11,7 @@ class EcgImage {
 
   EcgImage({
     required this.id,
-    required this.technicianId,
+    required this.userId,
     required this.imagePath,
     required this.voiceNotePath,
     required this.uploadedAt,
@@ -24,7 +24,7 @@ class EcgImage {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'technicianId': technicianId,
+      'userId': userId,
       'imagePath': imagePath,
       'voiceNotePath': voiceNotePath,
       'uploadedAt': uploadedAt.toIso8601String(),
@@ -38,7 +38,7 @@ class EcgImage {
   factory EcgImage.fromJson(Map<String, dynamic> json) {
     return EcgImage(
       id: json['id'],
-      technicianId: json['technicianId'],
+      userId: json['userId'],
       imagePath: json['imagePath'],
       voiceNotePath: json['voiceNotePath'],
       uploadedAt: DateTime.parse(json['uploadedAt']),
@@ -53,7 +53,7 @@ class EcgImage {
 
   EcgImage copyWith({
     String? id,
-    String? technicianId,
+    String? userId,
     String? imagePath,
     String? voiceNotePath,
     DateTime? uploadedAt,
@@ -64,7 +64,7 @@ class EcgImage {
   }) {
     return EcgImage(
       id: id ?? this.id,
-      technicianId: technicianId ?? this.technicianId,
+      userId: userId ?? this.userId,
       imagePath: imagePath ?? this.imagePath,
       voiceNotePath: voiceNotePath ?? this.voiceNotePath,
       uploadedAt: uploadedAt ?? this.uploadedAt,

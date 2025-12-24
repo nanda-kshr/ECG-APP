@@ -8,14 +8,14 @@ import '../services/patient_service.dart';
 import '../models/patient.dart';
 import '../services/task_service.dart';
 
-class TechnicianUploadScreen extends StatefulWidget {
-  const TechnicianUploadScreen({super.key});
+class UserUploadScreen extends StatefulWidget {
+  const UserUploadScreen({super.key});
 
   @override
-  State<TechnicianUploadScreen> createState() => _TechnicianUploadScreenState();
+  State<UserUploadScreen> createState() => _UserUploadScreenState();
 }
 
-class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
+class _UserUploadScreenState extends State<UserUploadScreen> {
   final _formKey = GlobalKey<FormState>();
   final _notesController = TextEditingController();
   final _patientSearchController = TextEditingController();
@@ -213,7 +213,7 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
 
       final result = await TaskService.createTaskMultipart(
         patientId: _selectedPatient!.id,
-        technicianId: currentUser.id,
+        userId: currentUser.id,
         notes: _notesController.text.trim(),
         priority: _selectedPriority,
         files: files,
@@ -238,7 +238,7 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
             showDialog(
               context: context,
               builder: (ctx) => AlertDialog(
-                title: const Text('High Volume'),
+                title: const Text('Try again Later'),
                 content: Text(errCallback),
                 actions: [
                   TextButton(
@@ -563,27 +563,29 @@ class _TechnicianUploadScreenState extends State<TechnicianUploadScreen> {
                         )),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
+
+              // Doctor opinion timing info
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(12),
-                margin: const EdgeInsets.only(bottom: 12),
                 decoration: BoxDecoration(
-                  color: Colors.red.shade50,
+                  color: Colors.blue.shade50,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.red.shade100),
+                  border: Border.all(color: Colors.blue.shade200),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.warning_amber_rounded, color: Colors.red),
+                    Icon(Icons.access_time, color: Colors.blue.shade700),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        'If this is an emergency, call Emergency Department: (044) 6672 6612',
+                        'Doctor\'s opinion expected within 15 minutes. For emergencies, call Saveetha Emergency Department: (044) 6672 6612',
                         style: TextStyle(
-                            color: Colors.red.shade700,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14),
+                          color: Colors.blue.shade700,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
                       ),
                     ),
                   ],

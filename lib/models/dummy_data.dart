@@ -8,7 +8,7 @@ class DummyData {
       id: 1,
       username: 'tech1',
       password: 'password',
-      role: UserRole.technician,
+      role: UserRole.user,
       name: 'John Smith (Clinic Doctor)',
     ),
     User(
@@ -36,7 +36,7 @@ class DummyData {
       id: 5,
       username: 'tech2',
       password: 'password',
-      role: UserRole.technician,
+      role: UserRole.user,
       name: 'Lisa Wilson (Clinic Doctor)',
     ),
   ];
@@ -153,8 +153,8 @@ class DummyData {
     ),
   ];
 
-  // Patient-Technician Mapping (which technician uploaded which patient)
-  static Map<int, int> patientTechnicianMap = {
+  // Patient-User Mapping (which user uploaded which patient)
+  static Map<int, int> patientUserMap = {
     1: 1, // Jane Doe uploaded by tech1
     2: 1, // Robert Smith uploaded by tech1
     3: 5, // Mary Johnson uploaded by tech2
@@ -252,7 +252,7 @@ class DummyData {
   static List<EcgImage> ecgImages = [
     EcgImage(
       id: '1',
-      technicianId: '1',
+      userId: '1',
       imagePath: 'dummy_ecg_1.jpg',
       voiceNotePath: 'voice_note_1.wav',
       uploadedAt: DateTime.now().subtract(const Duration(hours: 2)),
@@ -263,7 +263,7 @@ class DummyData {
     ),
     EcgImage(
       id: '2',
-      technicianId: '1',
+      userId: '1',
       imagePath: 'dummy_ecg_2.jpg',
       voiceNotePath: 'voice_note_2.wav',
       uploadedAt: DateTime.now().subtract(const Duration(hours: 4)),
@@ -272,7 +272,7 @@ class DummyData {
     ),
     EcgImage(
       id: '3',
-      technicianId: '5',
+      userId: '5',
       imagePath: 'dummy_ecg_3.jpg',
       voiceNotePath: 'voice_note_3.wav',
       uploadedAt: DateTime.now().subtract(const Duration(hours: 6)),
@@ -280,7 +280,7 @@ class DummyData {
     ),
     EcgImage(
       id: '4',
-      technicianId: '1',
+      userId: '1',
       imagePath: 'dummy_ecg_4.jpg',
       voiceNotePath: 'voice_note_4.wav',
       uploadedAt: DateTime.now().subtract(const Duration(minutes: 30)),
@@ -289,7 +289,7 @@ class DummyData {
     ),
     EcgImage(
       id: '5',
-      technicianId: '5',
+      userId: '5',
       imagePath: 'dummy_ecg_5.jpg',
       voiceNotePath: 'voice_note_5.wav',
       uploadedAt: DateTime.now().subtract(const Duration(hours: 8)),
@@ -311,10 +311,8 @@ class DummyData {
     return users.where((user) => user.role == UserRole.doctor).toList();
   }
 
-  static List<EcgImage> getImagesForTechnician(String technicianId) {
-    return ecgImages
-        .where((image) => image.technicianId == technicianId)
-        .toList();
+  static List<EcgImage> getImagesForUser(String userId) {
+    return ecgImages.where((image) => image.userId == userId).toList();
   }
 
   static List<EcgImage> getImagesForDoctor(String doctorId) {
@@ -378,10 +376,10 @@ class DummyData {
     return assignedPatients;
   }
 
-  static List<Patient> getPatientsForTechnician(int technicianId) {
+  static List<Patient> getPatientsForUser(int userId) {
     List<Patient> uploadedPatients = [];
-    patientTechnicianMap.forEach((patientId, techId) {
-      if (techId == technicianId) {
+    patientUserMap.forEach((patientId, techId) {
+      if (techId == userId) {
         final patient = getPatientById(patientId);
         if (patient != null) {
           uploadedPatients.add(patient);
