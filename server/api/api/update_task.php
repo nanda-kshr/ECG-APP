@@ -7,7 +7,10 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, Authorization, X-Req
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
 header('Access-Control-Max-Age: 86400');
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(200); exit; }
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
 
 $is_debug = (getenv('DEBUG') === '1');
 
@@ -16,27 +19,27 @@ try {
 
     $raw = file_get_contents('php://input');
     $data = json_decode($raw, true);
-    if (!is_array($data)) { 
-        http_response_code(400); 
-        echo json_encode(['success'=>false,'error'=>'Invalid JSON']); 
-        exit; 
+    if (!is_array($data)) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => 'Invalid JSON']);
+        exit;
     }
 
-    $taskId = (int)($data['task_id'] ?? 0);
-    $userId = (int)($data['user_id'] ?? 0); // doctor or admin
+    $taskId = (int) ($data['task_id'] ?? 0);
+    $userId = (int) ($data['user_id'] ?? 0); // doctor or admin
     $newStatus = strtolower(trim($data['status'] ?? ''));
     $feedback = trim($data['feedback'] ?? '');
 
     if ($taskId <= 0 || $userId <= 0) {
         http_response_code(400);
-        echo json_encode(['success'=>false,'error'=>'Missing task_id or user_id']);
+        echo json_encode(['success' => false, 'error' => 'Missing task_id or user_id']);
         exit;
     }
 
-    $allowedStatuses = ['pending','assigned','in_progress','completed','cancelled'];
+    $allowedStatuses = ['pending', 'assigned', 'in_progress', 'completed', 'cancelled'];
     if (!in_array($newStatus, $allowedStatuses, true)) {
         http_response_code(400);
-        echo json_encode(['success'=>false,'error'=>'Invalid status']);
+        echo json_encode(['success' => false, 'error' => 'Invalid status']);
         exit;
     }
 
@@ -46,7 +49,7 @@ try {
     $task = $stmtTask->fetch(PDO::FETCH_ASSOC);
     if (!$task) {
         http_response_code(404);
-        echo json_encode(['success'=>false,'error'=>'Task not found']);
+        echo json_encode(['success' => false, 'error' => 'Task not found']);
         exit;
     }
 
@@ -56,16 +59,16 @@ try {
     $user = $stmtUser->fetch(PDO::FETCH_ASSOC);
     if (!$user) {
         http_response_code(403);
-        echo json_encode(['success'=>false,'error'=>'User not found']);
+        echo json_encode(['success' => false, 'error' => 'User not found']);
         exit;
     }
 
     $isAdmin = ($user['role'] === 'admin');
-    $isAssignedDoctor = ((int)$task['assigned_doctor_id'] === $userId);
+    $isAssignedDoctor = ((int) $task['assigned_doctor_id'] === $userId);
 
     if (!$isAdmin && !$isAssignedDoctor) {
         http_response_code(403);
-        echo json_encode(['success'=>false,'error'=>'Not authorized to update this task']);
+        echo json_encode(['success' => false, 'error' => 'Not authorized to update this task']);
         exit;
     }
 
@@ -74,7 +77,7 @@ try {
     $oldStatus = $task['status'];
     $updates = ['status' => $newStatus];
     $setSql = ['status = :status'];
-    
+
     if ($feedback !== '') {
         $updates['feedback'] = $feedback;
         $setSql[] = 'doctor_feedback = :feedback';
@@ -99,21 +102,23 @@ try {
         'uid' => $userId,
         'old' => $oldStatus,
         'new' => $newStatus,
-        'comment' => $feedback !== '' ? 'Feedback: ' . substr($feedback, 0, 100) : 'Status updated'
+        'comment' => $feedback !== '' ? 'Opinion: ' . substr($feedback, 0, 100) : 'Status updated'
     ]);
 
     $pdo->commit();
 
-    echo json_encode(['success'=>true, 'message' => 'Opinion Updated']);
+    echo json_encode(['success' => true, 'message' => 'Opinion Updated']);
 
 } catch (Throwable $e) {
     if (isset($pdo) && $pdo->inTransaction()) {
         $pdo->rollBack();
     }
-    error_log('update_task error: '.$e->getMessage());
+    error_log('update_task error: ' . $e->getMessage());
     http_response_code(500);
-    $resp = ['success'=>false,'error'=>'Server error'];
-    if ($is_debug) { $resp['detail'] = $e->getMessage(); }
+    $resp = ['success' => false, 'error' => 'Server error'];
+    if ($is_debug) {
+        $resp['detail'] = $e->getMessage();
+    }
     echo json_encode($resp);
 }
 ?>

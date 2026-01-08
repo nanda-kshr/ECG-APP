@@ -354,7 +354,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                     message: task.doctorFeedback!,
                     time: task.completedAt,
                     isFromMe: false,
-                    senderRole: 'Doctor Feedback',
+                    senderRole: 'Doctor Opinion',
                     bubbleColor: const Color(0xFFFFFFFF),
                   ),
                   const SizedBox(height: 12),
@@ -800,7 +800,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
 
         const Divider(height: 1),
 
-        // Feedback section
+        // Opinion section
         if (isLastImage && isDoctor) ...[
           // If feedback already exists for this image, show it read-only
           if (image.comment != null && image.comment!.isNotEmpty) ...[
@@ -810,7 +810,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Feedback (submitted)',
+                    'Opinion',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -841,7 +841,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Your Feedback',
+                    'Your Opinion',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -918,7 +918,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
               ),
             ),
           ],
-        ] else if (isPatient) ...[
+        ] else if (isLastImage && isPatient) ...[
           // Patient view - show feedback as label
           Padding(
             padding: const EdgeInsets.all(10),
@@ -935,7 +935,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        'Doctor\'s Feedback',
+                        'Doctor\'s Opinion',
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -1035,7 +1035,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     setState(() {
       _isUpdating = false;
       if (result['success'] == true) {
-        _successMessage = result['message'] ?? 'Feedback submitted';
+        _successMessage = result['message'] ?? 'Opinion submitted';
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) Navigator.of(context).pop();
         });

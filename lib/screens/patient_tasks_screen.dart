@@ -391,7 +391,7 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
           const SizedBox(height: 8),
         ],
 
-        // Doctor Task Level Feedback (if needed outside images)
+        // Doctor Task Level Opinion (if needed outside images)
         // Currently your design puts feedback inside images or specific boxes.
         // If there's an overall task feedback separate from image feedback, it goes here.
         if (task.doctorFeedback != null && task.doctorFeedback!.isNotEmpty) ...[
@@ -400,7 +400,7 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
             message: task.doctorFeedback!,
             time: task.completedAt,
             isFromMe: false,
-            senderRole: 'Doctor Feedback (Task)',
+            senderRole: 'Doctor Opinion (Task)',
             bubbleColor: Colors.white,
           ),
           const SizedBox(height: 8),
@@ -643,7 +643,7 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
 
         const Divider(height: 1),
 
-        // Feedback section
+        // Opinion section
         if (isLastImage && isDoctor) ...[
           // If feedback already exists for this image, show it read-only
           if (image.comment != null && image.comment!.isNotEmpty) ...[
@@ -653,7 +653,7 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Feedback (submitted)',
+                    'Opinion',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -684,7 +684,7 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Your Feedback',
+                    'Your Opinion',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -779,7 +779,7 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        'Doctor\'s Feedback',
+                        'Doctor\'s Opinion',
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -1122,7 +1122,7 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
     setState(() {
       _isUpdating = false;
       if (result['success'] == true) {
-        _successMessage = result['message'] ?? 'Feedback submitted';
+        _successMessage = result['message'] ?? 'Opinion submitted';
         // Go back to previous screen (Dashboard)
         Future.delayed(const Duration(milliseconds: 300), () {
           if (mounted) Navigator.of(context).pop(true);
