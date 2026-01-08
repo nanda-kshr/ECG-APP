@@ -50,6 +50,7 @@ class TaskService {
     required int imageId,
     required int doctorId,
     String comment = '',
+    bool applyToAll = false,
   }) async {
     // Uses update_task.php with image-specific feedback
     final url = Uri.parse('${apiBase}update_task.php');
@@ -62,6 +63,7 @@ class TaskService {
           'user_id': doctorId,
           'feedback': comment,
           'image_id': imageId,
+          'apply_to_all': applyToAll,
         }),
       );
       final decoded = jsonDecode(resp.body);
@@ -256,6 +258,8 @@ class TaskService {
       final resp = await http
           .get(Uri.parse('${apiBase}list_tasks.php?limit=200'))
           .timeout(const Duration(seconds: 10));
+      print('TaskService: getTaskById Status: ${resp.statusCode}');
+      print('TaskService: getTaskById Body: ${resp.body}');
       if (resp.statusCode == 200) {
         final decoded = jsonDecode(resp.body);
         if (decoded['success'] == true && decoded['tasks'] != null) {

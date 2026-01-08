@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../config.dart';
@@ -18,7 +19,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   static const String apiBase = apiBaseUrl;
   final _formKey = GlobalKey<FormState>();
-  String name = '', email = '', password = '';
+  String name = '', email = '', phone = '', password = '';
   String? role;
   bool _isLoading = false;
   String? _errorMessage;
@@ -41,8 +42,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final response = await http.post(
       Uri.parse('${apiBase}register.php'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(
-          {'name': name, 'email': email, 'password': password, 'role': role}),
+      body: jsonEncode({
+        'name': name,
+        'email': email,
+        'phone': phone,
+        'password': password,
+        'role': role
+      }),
     );
 
     setState(() {
@@ -116,6 +122,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onChanged: (val) => email = val,
                       validator: (val) =>
                           val == null || val.isEmpty ? 'Enter email' : null,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Phone Number',
+                        prefixIcon: const Icon(Icons.phone),
+                        prefixText: '+91 ',
+                        prefixStyle:
+                            const TextStyle(color: Colors.black, fontSize: 16),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                      ),
+                      keyboardType: TextInputType.number,
+                      maxLength: 10,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      onChanged: (val) => phone = val,
+                      validator: (val) {
+                        if (val == null || val.isEmpty)
+                          return 'Enter phone number';
+                        if (val.length != 10)
+                          return 'Phone number must be exactly 10 digits';
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 16),
                     TextFormField(

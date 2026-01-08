@@ -4,6 +4,8 @@ import '../models/task.dart';
 import '../services/task_service.dart';
 import '../services/auth_service.dart';
 import '../config.dart';
+import '../models/patient.dart';
+import 'user_upload_screen.dart';
 
 class PatientTasksScreen extends StatefulWidget {
   final List<Task> tasks;
@@ -173,7 +175,8 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
       'Nov',
       'Dec'
     ];
-    return '${months[dateTime.month - 1]} ${dateTime.day}, ${dateTime.year}';
+    final day = dateTime.day.toString().padLeft(2, '0');
+    return '$day - ${months[dateTime.month - 1]} - ${dateTime.year}';
   }
 
   @override
@@ -223,7 +226,7 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
                     ),
                   ),
                   Text(
-                    'ID: ${widget.patientIdStr} • ${sortedTasks.length} Tasks',
+                    'ID: ${widget.patientIdStr} • ${sortedTasks.length} ECG',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.white.withOpacity(0.8),
@@ -234,6 +237,31 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.upload_file),
+            tooltip: 'Upload ECG',
+            onPressed: () {
+              int pId = 0;
+              if (widget.tasks.isNotEmpty) {
+                pId = widget.tasks.first.patientId;
+              }
+              final patient = Patient(
+                id: pId,
+                patientId: widget.patientIdStr,
+                name: widget.patientName,
+                createdAt: DateTime.now(),
+              );
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => UserUploadScreen(
+                    preSelectedPatient: patient,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -255,13 +283,14 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
 
                 const SizedBox(height: 20),
 
-                // Tasks (newest first due to reverse, which appears at bottom)
+                // ECG (newest first due to reverse, which appears at bottom)
                 // Serial numbers: newest = 1, counting up for older tasks
                 ...sortedTasks.asMap().entries.map((entry) {
                   final index = entry.key;
                   final task = entry.value;
-                  // Since list is sorted newest first, serial is index + 1
-                  final serialNumber = index + 1;
+                  // Since list is sorted newest first, serial is Total - Index
+                  // e.g. Count=5. Index=0 (Newest) -> 5. Index=4 (Oldest) -> 1.
+                  final serialNumber = sortedTasks.length - index;
                   return _buildTaskSection(
                     task,
                     serialNumber: serialNumber,
@@ -282,11 +311,6 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
                     if (sortedTasks.isNotEmpty &&
                         sortedTasks.first.patientAge != null)
                       ('Age', '${sortedTasks.first.patientAge} years'),
-                    if (sortedTasks.isNotEmpty)
-                      (
-                        'Assigned Doctor',
-                        sortedTasks.first.doctorName ?? 'N/A'
-                      ),
                   ],
                   isFromMe: false,
                 ),
@@ -434,6 +458,7 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
                     isDoctor: isDoctor,
                     isPatient: isPatient,
                     isUser: isUser,
+                    isLastImage: isLastImage,
                   ),
                   // Divider between images (if not last)
                   if (!isLastImage)
@@ -513,6 +538,7 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
     required bool isDoctor,
     required bool isPatient,
     required bool isUser,
+    required bool isLastImage,
   }) {
     final imageUrl = _getImageUrl(image);
     final controller = _imageFeedbackControllers[image.imageId];
@@ -618,7 +644,7 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
         const Divider(height: 1),
 
         // Feedback section
-        if (isDoctor) ...[
+        if (isLastImage && isDoctor) ...[
           // If feedback already exists for this image, show it read-only
           if (image.comment != null && image.comment!.isNotEmpty) ...[
             Padding(
@@ -650,8 +676,8 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
                 ],
               ),
             ),
-          ] else ...[
-            // Doctor input box
+          ] else if (isLastImage) ...[
+            // Doctor input box - ONLY for last image
             Padding(
               padding: const EdgeInsets.all(10),
               child: Column(
@@ -686,7 +712,7 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
                             maxLines: 3,
                             minLines: 1,
                             decoration: const InputDecoration(
-                              hintText: 'Enter feedback...',
+                              hintText: 'Enter opinion...',
                               hintStyle: TextStyle(fontSize: 13),
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.symmetric(
@@ -736,7 +762,7 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
               ),
             ),
           ],
-        ] else if (isPatient) ...[
+        ] else if (isLastImage && isPatient) ...[
           // Patient view
           Padding(
             padding: const EdgeInsets.all(10),
@@ -781,40 +807,42 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.orange.shade50,
+                      color: Colors.red.shade50,
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.orange.shade200),
+                      border: Border.all(color: Colors.red.shade200),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(
-                              Icons.info_outline,
-                              size: 18,
-                              color: Colors.orange.shade700,
+                            Padding(
+                              padding: const EdgeInsets.only(top: 2.0),
+                              child: Icon(
+                                Icons.info_outline,
+                                size: 20,
+                                color: Colors.red.shade700,
+                              ),
                             ),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 12),
                             Expanded(
-                              child: Text(
-                                'This request has been closed due to high patient load.',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.orange.shade800,
-                                ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'This request has been closed due to high patient load. In case of emergency, please contact Saveetha Emergency.',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.red.shade700,
+                                      height: 1.3,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          'In case of emergency, please contact Saveetha Emergency.',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.orange.shade700,
-                          ),
                         ),
                         const SizedBox(height: 10),
                         SizedBox(
@@ -1088,14 +1116,17 @@ class _PatientTasksScreenState extends State<PatientTasksScreen> {
       imageId: imageId,
       doctorId: currentUser.id,
       comment: comment,
+      applyToAll: true,
     );
 
     setState(() {
       _isUpdating = false;
       if (result['success'] == true) {
         _successMessage = result['message'] ?? 'Feedback submitted';
-        // You might want to update local state here to see changes immediately
-        // For now relying on user context or rebuild.
+        // Go back to previous screen (Dashboard)
+        Future.delayed(const Duration(milliseconds: 300), () {
+          if (mounted) Navigator.of(context).pop(true);
+        });
       } else {
         _errorMessage = result['error'] ?? 'Failed to submit feedback';
       }

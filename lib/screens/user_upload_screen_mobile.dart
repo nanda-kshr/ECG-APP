@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
@@ -9,7 +10,9 @@ import '../models/patient.dart';
 import '../services/task_service.dart';
 
 class UserUploadScreen extends StatefulWidget {
-  const UserUploadScreen({super.key});
+  final Patient? preSelectedPatient;
+
+  const UserUploadScreen({super.key, this.preSelectedPatient});
 
   @override
   State<UserUploadScreen> createState() => _UserUploadScreenState();
@@ -36,6 +39,7 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
   List<Patient> _options = [];
   bool _searching = false;
   Patient? _selectedPatient;
+  Timer? _debounce;
 
   // create patient state
   String _gender = 'male';
@@ -50,6 +54,10 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
   void initState() {
     super.initState();
     _fetchPendingCount();
+    if (widget.preSelectedPatient != null) {
+      _selectedPatient = widget.preSelectedPatient;
+      _patientSearchController.text = _selectedPatient!.displayInfo;
+    }
   }
 
   Future<void> _fetchPendingCount() async {
@@ -72,6 +80,10 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
   }
 
   Future<void> _captureFromCamera() async {
+    if (_selectedImages.length >= 5) {
+      setState(() => _errorMessage = 'Maximum 5 images allowed per upload');
+      return;
+    }
     try {
       final image = await _picker.pickImage(
         source: ImageSource.camera,
@@ -90,11 +102,22 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
   }
 
   Future<void> _searchPatients(String query) async {
+    if (query.isEmpty) {
+      setState(() => _options = []);
+      return;
+    }
     setState(() => _searching = true);
     final results = await PatientService.searchPatients(query: query);
     setState(() {
       _options = results;
       _searching = false;
+    });
+  }
+
+  void _onSearchChanged(String query) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(seconds: 2), () {
+      _searchPatients(query);
     });
   }
 
@@ -309,8 +332,17 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
                                       _patientSearchController.text.trim()),
                                 ),
                         ),
-                        onSubmitted: (q) => _searchPatients(q.trim()),
+                        onSubmitted: (q) {
+                          if (_debounce?.isActive ?? false) _debounce!.cancel();
+                          _searchPatients(q.trim());
+                        },
+                        onChanged: _onSearchChanged,
                       ),
+                      if (_searching)
+                        const Padding(
+                          padding: EdgeInsets.only(top: 4.0),
+                          child: LinearProgressIndicator(minHeight: 2),
+                        ),
                       const SizedBox(height: 8),
                       Container(
                         decoration: BoxDecoration(
@@ -383,8 +415,8 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
                           icon: const Icon(Icons.camera_alt, size: 28),
                           label: Text(
                             _selectedImages.isEmpty
-                                ? 'Capture ECG'
-                                : 'Capture ECG (${_selectedImages.length} selected)',
+                                ? 'Capture ECG (Max 5)'
+                                : 'Capture ECG (${_selectedImages.length}/5 selected)',
                             style: const TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w500),
                           ),
@@ -570,19 +602,19 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
+                  color: Colors.red.shade50,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.blue.shade200),
+                  border: Border.all(color: Colors.red.shade200),
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.access_time, color: Colors.blue.shade700),
+                    Icon(Icons.access_time, color: Colors.red.shade700),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         'Doctor\'s opinion expected within 15 minutes. For emergencies, call Saveetha Emergency Department: (044) 6672 6612',
                         style: TextStyle(
-                          color: Colors.blue.shade700,
+                          color: Colors.red.shade700,
                           fontWeight: FontWeight.w600,
                           fontSize: 14,
                         ),
@@ -630,6 +662,7 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
 
   @override
   void dispose() {
+    _debounce?.cancel();
     _notesController.dispose();
     _patientSearchController.dispose();
     _nameController.dispose();

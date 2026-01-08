@@ -147,7 +147,7 @@ class _UserDashboardState extends State<UserDashboard> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: CommonAppBar(
-        title: 'Cardio',
+        title: 'Saveetha Cardio App',
         user: user,
         onLogout: () {
           Navigator.of(context).pushReplacement(
@@ -208,14 +208,14 @@ class _UserDashboardState extends State<UserDashboard> {
                   const SizedBox(width: 12),
                   Expanded(
                       child: _buildStatCard(
-                          'Pending Tasks',
+                          'Pending ECG',
                           _underReviewCount.toString(),
                           Colors.orange,
                           Icons.rate_review)),
                   const SizedBox(width: 12),
                   Expanded(
                       child: _buildStatCard(
-                          'Completed Tasks',
+                          'Completed ECG',
                           _feedbackReceivedCount.toString(),
                           Colors.green,
                           Icons.check_circle)),
@@ -555,7 +555,7 @@ class _UserDashboardState extends State<UserDashboard> {
               ),
             ),
           );
-          _loadTasks();
+          _loadTasks(); // Refresh after returning
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
@@ -672,6 +672,7 @@ class _UserDashboardState extends State<UserDashboard> {
       'Nov',
       'Dec'
     ];
-    return '${months[dateTime.month - 1]} ${dateTime.day}';
+    final day = dateTime.day.toString().padLeft(2, '0');
+    return '$day - ${months[dateTime.month - 1]} - ${dateTime.year}';
   }
 }

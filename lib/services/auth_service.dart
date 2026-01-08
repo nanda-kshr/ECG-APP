@@ -5,6 +5,14 @@ import 'dart:convert';
 import '../config.dart';
 import 'push_service.dart';
 
+enum LoginStatus {
+  success,
+  invalidCredentials,
+  accountNotFound,
+  serverError,
+  unknown
+}
+
 class AuthService {
   static const String apiBase = apiBaseUrl;
   static const String _currentUserKey = 'current_user_id';
@@ -17,7 +25,7 @@ class AuthService {
   static User? get currentUser => _currentUser;
 
   // Use new API spec: login.php expects { email, password }
-  static Future<bool> login(String email, String password,
+  static Future<LoginStatus> login(String email, String password,
       {String? role}) async {
     final String apiUrl = '${apiBase}login.php';
     try {
@@ -38,33 +46,40 @@ class AuthService {
 
       // Capture session cookie if provided
       _captureSessionCookieFromResponse(response);
-      if (_handleLoginResponse(response)) return true;
+      final status = _handleLoginResponse(response);
+      if (status == LoginStatus.success) return status;
+      if (status == LoginStatus.accountNotFound) return status;
 
-      // Fallback: form encoded
-      final formResponse = await http.post(
-        Uri.parse(apiUrl),
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body:
-            'email=${Uri.encodeQueryComponent(email)}&password=${Uri.encodeQueryComponent(password)}${role != null ? '&role=${Uri.encodeQueryComponent(role)}' : ''}',
-      );
-      _captureSessionCookieFromResponse(formResponse);
-      if (_handleLoginResponse(formResponse)) return true;
+      // Fallback: form encoded (Only if previous attempt wasn't a definitive 404/Success)
+      // Actually, if we got a 404, we shouldn't fallback, we know the account is missing.
+      // But keeping fallback logic safe:
+      if (status != LoginStatus.accountNotFound) {
+        final formResponse = await http.post(
+          Uri.parse(apiUrl),
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          body:
+              'email=${Uri.encodeQueryComponent(email)}&password=${Uri.encodeQueryComponent(password)}${role != null ? '&role=${Uri.encodeQueryComponent(role)}' : ''}',
+        );
+        _captureSessionCookieFromResponse(formResponse);
+        return _handleLoginResponse(formResponse);
+      }
+      return status;
     } catch (e, st) {
       // Better logging for web XMLHttpRequest errors
       print('Exception during login: $e');
       print(st);
+      return LoginStatus.unknown;
     }
-    return false;
   }
 
-  static bool _handleLoginResponse(http.Response response) {
+  static LoginStatus _handleLoginResponse(http.Response response) {
     try {
       if (response.statusCode == 200) {
         final body = response.body.trim();
         if (body.isEmpty || !(body.startsWith('{') || body.startsWith('['))) {
           print(
               'Non-JSON response: ${body.substring(0, body.length.clamp(0, 200))}');
-          return false;
+          return LoginStatus.serverError;
         }
         final data = jsonDecode(body);
         if (data['success'] == true && data['user'] != null) {
@@ -75,18 +90,24 @@ class AuthService {
             prefs.setString(
                 _currentUserJsonKey, jsonEncode(_currentUser!.toJson()));
           });
-          return true;
+          return LoginStatus.success;
         } else {
-          print(
-              'Login failed: ${data['error'] ?? data['detail'] ?? 'Unknown error'}');
+          // Should ideally check data['code'] here too if 200 OK has business error
+          return LoginStatus.invalidCredentials;
         }
+      } else if (response.statusCode == 404) {
+        // We explicitly return 404 from PHP for "account not found"
+        return LoginStatus.accountNotFound;
+      } else if (response.statusCode == 401) {
+        return LoginStatus.invalidCredentials;
       } else {
         print('HTTP error: ${response.statusCode}');
+        return LoginStatus.serverError;
       }
     } catch (e) {
       print('Login parse error: $e');
+      return LoginStatus.unknown;
     }
-    return false;
   }
 
   static Future<void> logout() async {
@@ -97,7 +118,8 @@ class AuthService {
     await prefs.remove('session_cookie');
   }
 
-  static Future<void> _captureSessionCookieFromResponse(http.Response response) async {
+  static Future<void> _captureSessionCookieFromResponse(
+      http.Response response) async {
     try {
       final sc = response.headers['set-cookie'];
       if (sc != null && sc.isNotEmpty) {

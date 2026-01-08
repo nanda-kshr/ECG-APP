@@ -1060,7 +1060,7 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
               builder: (context) => TaskDetailScreen(task: task),
             ),
           );
-          _loadAssignedTasks();
+          _loadAssignedTasks(); // Refresh after returning
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
@@ -1226,8 +1226,8 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
       margin: const EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
-        onTap: () {
-          Navigator.push(
+        onTap: () async {
+          await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => PatientTasksScreen(
@@ -1237,6 +1237,7 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
               ),
             ),
           );
+          _loadAssignedTasks(); // Refresh after returning
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
@@ -1354,6 +1355,7 @@ class _DoctorDashboardState extends State<DoctorDashboard> {
       'Nov',
       'Dec'
     ];
-    return '${months[dateTime.month - 1]} ${dateTime.day}';
+    final day = dateTime.day.toString().padLeft(2, '0');
+    return '$day - ${months[dateTime.month - 1]} - ${dateTime.year}';
   }
 }

@@ -64,7 +64,7 @@ class _AssignTaskScreenState extends State<AssignTaskScreen> {
       _isLoading = false;
       if (result['success'] == true) {
         _successMessage =
-            'Task created (ID: ${result['task_id']}) and auto-assigned to duty doctor';
+            'ECG created (ID: ${result['task_id']}) and auto-assigned to duty doctor';
         _selectedPatient = null;
         _patientSearchController.clear();
         _notesController.clear();

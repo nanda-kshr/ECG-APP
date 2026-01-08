@@ -434,10 +434,26 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
   }
 
   String _formatDate(DateTime date) {
-    return '${date.day}/${date.month}/${date.year}';
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    final day = date.day.toString().padLeft(2, '0');
+    return '$day - ${months[date.month - 1]} - ${date.year}';
   }
 
   String _formatDateTime(DateTime date) {
-    return '${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
+    final dateStr = _formatDate(date);
+    return '$dateStr ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
   }
 }

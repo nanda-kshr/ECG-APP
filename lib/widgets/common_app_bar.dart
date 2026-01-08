@@ -32,16 +32,8 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Row(
             children: [
-              CircleAvatar(
-                radius: 16,
-                backgroundColor: Colors.white.withOpacity(0.2),
-                child: Icon(
-                  _getRoleIcon(user.role),
-                  size: 18,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(width: 8),
+              // Icon removed as per request
+
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,

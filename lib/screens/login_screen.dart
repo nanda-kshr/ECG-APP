@@ -8,6 +8,7 @@ import '../models/user.dart';
 import 'admin_dashboard.dart';
 import 'doctor_dashboard.dart';
 import 'user_dashboard.dart';
+import 'reset_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key}); // Add const constructor
@@ -29,25 +30,73 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     // Use updated AuthService signature (email/password)
-    final success = await AuthService.login(email, password);
+    final status = await AuthService.login(email, password);
+
+    if (!mounted) return;
 
     setState(() {
       _isLoading = false;
     });
 
-    if (success) {
-      // Ensure FCM token is registered on the server for this user
-      try {
-        await PushService.ensureRegisteredAfterLogin();
-      } catch (e) {
-        // non-fatal
-      }
-      _navigateToRoleBasedScreen();
-    } else {
-      setState(() {
-        _errorMessage = 'Invalid email or password';
-      });
+    switch (status) {
+      case LoginStatus.success:
+        try {
+          await PushService.ensureRegisteredAfterLogin();
+        } catch (e) {
+          // non-fatal
+        }
+        _navigateToRoleBasedScreen();
+        break;
+
+      case LoginStatus.accountNotFound:
+        _showAccountNotFoundDialog();
+        break;
+
+      case LoginStatus.invalidCredentials:
+        setState(() {
+          _errorMessage = 'Invalid email or password';
+        });
+        break;
+
+      case LoginStatus.serverError:
+        setState(() {
+          _errorMessage = 'Server error. Please try again later.';
+        });
+        break;
+
+      default:
+        setState(() {
+          _errorMessage = 'An unknown error occurred.';
+        });
     }
+  }
+
+  void _showAccountNotFoundDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Account Not Found'),
+        content: const Text(
+            "We couldn't find an account with that email. Would you like to create a new one?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(ctx).pop(); // close dialog
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const SignUpScreen(forceRole: 'user')),
+              );
+            },
+            child: const Text('Sign Up'),
+          ),
+        ],
+      ),
+    );
   }
 
   void _navigateToRoleBasedScreen() {
@@ -107,14 +156,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       decoration: InputDecoration(
-                        labelText: 'Email',
-                        prefixIcon: const Icon(Icons.email),
+                        labelText: 'Email or Phone Number',
+                        prefixIcon: const Icon(Icons.person),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8)),
                       ),
                       onChanged: (val) => email = val,
-                      validator: (val) =>
-                          val == null || val.isEmpty ? 'Enter email' : null,
+                      validator: (val) {
+                        if (val == null || val.isEmpty)
+                          return 'Enter email or phone';
+                        // Basic validation: Contains '@' (email) OR is digits (phone)
+                        bool isEmail = val.contains('@');
+                        bool isPhone = RegExp(r'^\d+$').hasMatch(val);
+                        if (!isEmail && !isPhone)
+                          return 'Enter a valid email or phone number';
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
@@ -156,6 +213,20 @@ class _LoginScreenState extends State<LoginScreen> {
                             : const Text('Sign In',
                                 style: TextStyle(
                                     fontSize: 18, color: Colors.white)),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const ResetPasswordScreen()),
+                          );
+                        },
+                        child: const Text('Forgot Password?',
+                            style: TextStyle(color: Colors.blue)),
                       ),
                     ),
                     const SizedBox(height: 12),

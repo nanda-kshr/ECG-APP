@@ -41,14 +41,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
             const DutyDoctorTab(),
             // 1: Pending
             const TaskListScreen(
-              title: 'Pending Tasks',
+              title: 'Pending ECG',
               filterStatus: 'pending',
             ),
             // 2: Home (default)
             const AdminHomeTab(),
             // 3: Completed
             const TaskListScreen(
-              title: 'Completed Tasks',
+              title: 'Completed ECG',
               filterStatus: 'completed',
             ),
             // 4: Profile
@@ -151,7 +151,7 @@ class _AdminHomeTabState extends State<AdminHomeTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cardio App'),
+        title: const Text('Saveetha Cardio App'),
         actions: [
           IconButton(onPressed: _load, icon: const Icon(Icons.refresh)),
           IconButton(
@@ -184,7 +184,7 @@ class _AdminHomeTabState extends State<AdminHomeTab> {
                         children: [
                           Expanded(
                             child: _buildStatCard(
-                              'Total Tasks',
+                              'Total ECG',
                               _totalTasks.toString(),
                               Colors.blue,
                               Icons.assignment,
@@ -193,7 +193,7 @@ class _AdminHomeTabState extends State<AdminHomeTab> {
                           const SizedBox(width: 12),
                           Expanded(
                             child: _buildStatCard(
-                              'Pending Tasks',
+                              'Pending ECG',
                               _pendingTasks.toString(),
                               Colors.orange,
                               Icons.pending_actions,
@@ -202,7 +202,7 @@ class _AdminHomeTabState extends State<AdminHomeTab> {
                           const SizedBox(width: 12),
                           Expanded(
                             child: _buildStatCard(
-                              'Completed Tasks',
+                              'Completed ECG',
                               _completedTasks.toString(),
                               Colors.green,
                               Icons.check_circle,
@@ -225,7 +225,7 @@ class _AdminHomeTabState extends State<AdminHomeTab> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => const TaskListScreen(
-                                    title: 'Pending Tasks',
+                                    title: 'Pending ECG',
                                     filterStatus: 'pending',
                                   ),
                                 ),
@@ -320,12 +320,13 @@ class _AdminHomeTabState extends State<AdminHomeTab> {
             ),
           ],
         ),
-        onTap: () {
-          Navigator.push(
+        onTap: () async {
+          await Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => TaskDetailScreen(task: task)),
           );
+          _load(); // Refresh after returning
         },
       ),
     );
@@ -523,6 +524,7 @@ class _AdminHomeTabState extends State<AdminHomeTab> {
       'Nov',
       'Dec'
     ];
-    return '${months[dateTime.month - 1]} ${dateTime.day}';
+    final day = dateTime.day.toString().padLeft(2, '0');
+    return '$day - ${months[dateTime.month - 1]} - ${dateTime.year}';
   }
 }

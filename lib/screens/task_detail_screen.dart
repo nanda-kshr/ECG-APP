@@ -216,7 +216,8 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
       'Nov',
       'Dec'
     ];
-    return '${months[dateTime.month - 1]} ${dateTime.day}, ${dateTime.year}';
+    final day = dateTime.day.toString().padLeft(2, '0');
+    return '$day - ${months[dateTime.month - 1]} - ${dateTime.year}';
   }
 
   @override
@@ -295,7 +296,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
               children: [
                 // Task info header bubble
                 _buildSystemMessage(
-                  'Task created on ${_formatDate(task.createdAt)} at ${_formatTime(task.createdAt)}',
+                  'ECG created on ${_formatDate(task.createdAt)} at ${_formatTime(task.createdAt)}',
                 ),
                 const SizedBox(height: 8),
 
@@ -603,6 +604,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                     isDoctor: isDoctor,
                     isPatient: isPatient,
                     isUser: isUser,
+                    isLastImage: isLastImage,
                   ),
                   // Divider between images (if not last)
                   if (!isLastImage)
@@ -682,6 +684,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     required bool isDoctor,
     required bool isPatient,
     required bool isUser,
+    required bool isLastImage,
   }) {
     final imageUrl = _getImageUrl(image);
     final controller = _imageFeedbackControllers[image.imageId];
@@ -798,7 +801,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
         const Divider(height: 1),
 
         // Feedback section
-        if (isDoctor) ...[
+        if (isLastImage && isDoctor) ...[
           // If feedback already exists for this image, show it read-only
           if (image.comment != null && image.comment!.isNotEmpty) ...[
             Padding(
@@ -866,7 +869,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                             maxLines: 3,
                             minLines: 1,
                             decoration: const InputDecoration(
-                              hintText: 'Enter feedback...',
+                              hintText: 'Enter opinion...',
                               hintStyle: TextStyle(fontSize: 13),
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.symmetric(

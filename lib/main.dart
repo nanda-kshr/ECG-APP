@@ -202,14 +202,14 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blue[600],
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.favorite,
-              size: 80,
-              color: Colors.white,
+            Image.asset(
+              'assets/images/logo.png',
+              width: 120,
+              height: 120,
             ),
             SizedBox(height: 24),
             Text(
