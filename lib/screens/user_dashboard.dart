@@ -177,7 +177,7 @@ class _UserDashboardState extends State<UserDashboard> {
                     label: Text(
                       uploadAllowed
                           ? 'Upload ECG'
-                          : 'Upload\n(Mon–Fri, 8–3 PM IST)',
+                          : 'Upload\n(Daily, 8–3 PM IST)',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                           fontSize: 16, fontWeight: FontWeight.w600),
@@ -477,8 +477,6 @@ class _UserDashboardState extends State<UserDashboard> {
   bool _isUploadAllowed() {
     final ist =
         DateTime.now().toUtc().add(const Duration(hours: 5, minutes: 30));
-    final weekday = ist.weekday; // 1 = Monday
-    if (weekday < DateTime.monday || weekday > DateTime.friday) return false;
     final hour = ist.hour;
     return hour >= 8 && hour < 15;
   }
@@ -488,7 +486,7 @@ class _UserDashboardState extends State<UserDashboard> {
         DateTime.now().toUtc().add(const Duration(hours: 5, minutes: 30));
     // final timeStr = '${ist.hour.toString().padLeft(2, '0')}:${ist.minute.toString().padLeft(2, '0')} IST';
     // ScaffoldMessenger.of(context).showSnackBar(
-    //   SnackBar(content: Text('Uploads allowed Mon–Fri 08:00–15:00 IST. Current IST time: $timeStr')),
+    //   SnackBar(content: Text('Uploads allowed 08:00–15:00 IST. Current IST time: $timeStr')),
     // );
   }
 

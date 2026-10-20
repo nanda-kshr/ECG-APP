@@ -236,7 +236,7 @@ class TaskService {
           req.files.add(f);
         }
       }
-      final streamed = await req.send();
+      final streamed = await req.send().timeout(const Duration(seconds: 90));
       final resp = await http.Response.fromStream(streamed);
       final decoded = jsonDecode(resp.body);
       if (resp.statusCode == 200 && decoded['success'] == true) {

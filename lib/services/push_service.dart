@@ -19,6 +19,10 @@ class PushService {
   static String? get token => _token;
 
   static Future<String?> _getSafeToken() async {
+    if (kIsWeb) {
+      _token ??= 'web_token_${DateTime.now().millisecondsSinceEpoch}';
+      return _token;
+    }
     try {
       if (defaultTargetPlatform == TargetPlatform.iOS) {
         String? apnsToken = await _messaging.getAPNSToken();
@@ -41,6 +45,11 @@ class PushService {
   static Future<void> initialize() async {
     if (_initialized) return;
     _initialized = true;
+
+    if (kIsWeb) {
+      _token ??= 'web_token_${DateTime.now().millisecondsSinceEpoch}';
+      return;
+    }
 
     try {
       if (Firebase.apps.isEmpty) {

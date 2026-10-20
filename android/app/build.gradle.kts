@@ -59,10 +59,12 @@ android {
                 // Fallback to debug signing if no key.properties is present (not recommended for Play Store release)
                 signingConfig = signingConfigs.getByName("debug")
             }
-            isMinifyEnabled = false
-            // Keep resource shrinking disabled unless minification is enabled to avoid gradle build errors.
-            isShrinkResources = false
-            // You can add proguard settings if needed
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 }

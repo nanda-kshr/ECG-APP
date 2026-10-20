@@ -89,7 +89,9 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
       final image = await _picker.pickImage(
         source: ImageSource.camera,
         preferredCameraDevice: CameraDevice.rear,
-        imageQuality: 90,
+        maxWidth: 1800,
+        maxHeight: 1800,
+        imageQuality: 75,
       );
       if (image != null) {
         setState(() {
@@ -217,7 +219,6 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
     try {
       final files = <http.MultipartFile>[];
       for (final x in _selectedImages) {
-        final bytes = await x.readAsBytes();
         final lower = x.name.toLowerCase();
         MediaType? ct;
         if (lower.endsWith('.jpg') || lower.endsWith('.jpeg')) {
@@ -227,12 +228,22 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
         } else if (lower.endsWith('.gif')) {
           ct = MediaType('image', 'gif');
         }
-        files.add(http.MultipartFile.fromBytes(
-          'image[]',
-          bytes,
-          filename: x.name,
-          contentType: ct,
-        ));
+        if (x.path.isNotEmpty) {
+          files.add(await http.MultipartFile.fromPath(
+            'image[]',
+            x.path,
+            filename: x.name,
+            contentType: ct,
+          ));
+        } else {
+          final bytes = await x.readAsBytes();
+          files.add(http.MultipartFile.fromBytes(
+            'image[]',
+            bytes,
+            filename: x.name,
+            contentType: ct,
+          ));
+        }
       }
 
       final result = await TaskService.createTaskMultipart(
@@ -566,7 +577,7 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
                   //     const SizedBox(width: 8),
                   //     Expanded(
                   //       child: Text(
-                  //         'Uploads are allowed Mon–Fri 08:00–15:00 IST. Current IST time: ${_currentIstString()}',
+                  //         'Uploads are allowed 08:00–15:00 IST. Current IST time: ${_currentIstString()}',
                   //         style: const TextStyle(color: Colors.black87),
                   //       ),
                   //     ),
@@ -634,8 +645,6 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
   bool _isUploadAllowed() {
     final ist =
         DateTime.now().toUtc().add(const Duration(hours: 5, minutes: 30));
-    final weekday = ist.weekday;
-    if (weekday < DateTime.monday || weekday > DateTime.friday) return false;
     final hour = ist.hour;
     return hour >= 8 && hour < 15;
   }
@@ -653,7 +662,7 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
     //   barrierDismissible: true,
     //   builder: (context) => AlertDialog(
     //     title: const Text('Upload Disabled'),
-    //     content: Text('Uploads are allowed Mon–Fri 08:00–15:00 IST. Current IST time: $now'),
+    //     content: Text('Uploads are allowed 08:00–15:00 IST. Current IST time: $now'),
     //     actions: [
     //       TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK')),
     //     ],
