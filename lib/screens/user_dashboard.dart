@@ -168,23 +168,18 @@ class _UserDashboardState extends State<UserDashboard> {
                 width: double.infinity,
                 height: 80,
                 child: Builder(builder: (context) {
-                  final uploadAllowed = _isUploadAllowed();
                   return ElevatedButton.icon(
-                    onPressed: uploadAllowed
-                        ? _navigateToUpload
-                        : () => _showUploadDisabledSnackbar(context),
+                    onPressed: _navigateToUpload,
                     icon: const Icon(Icons.upload_file, size: 32),
                     label: Text(
-                      uploadAllowed
-                          ? 'Upload ECG'
-                          : 'Upload\n(Daily, 8–3 PM IST)',
+                      'Upload ECG',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                           fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
-                          uploadAllowed ? Colors.green : Colors.grey,
+                          Colors.green,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -474,21 +469,6 @@ class _UserDashboardState extends State<UserDashboard> {
     return name.isNotEmpty ? name[0].toUpperCase() : 'U';
   }
 
-  bool _isUploadAllowed() {
-    final ist =
-        DateTime.now().toUtc().add(const Duration(hours: 5, minutes: 30));
-    final hour = ist.hour;
-    return hour >= 8 && hour < 15;
-  }
-
-  void _showUploadDisabledSnackbar(BuildContext context) {
-    final ist =
-        DateTime.now().toUtc().add(const Duration(hours: 5, minutes: 30));
-    // final timeStr = '${ist.hour.toString().padLeft(2, '0')}:${ist.minute.toString().padLeft(2, '0')} IST';
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   SnackBar(content: Text('Uploads allowed 08:00–15:00 IST. Current IST time: $timeStr')),
-    // );
-  }
 
   Widget _buildEmptyState() {
     return Center(
