@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'firebase_options.dart';
@@ -21,56 +22,62 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('🔥🔥 FCM MESSAGE RECEIVED');
-    print('Message ID: ${message.messageId}');
-    print('Title: ${message.notification?.title}');
-    print('Body: ${message.notification?.body}');
-    print('Data: ${message.data}');
-  });
-
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print('🔥🔥 FCM MESSAGE OPENED');
-    print('Message ID: ${message.messageId}');
-  });
-
-  FirebaseMessaging.instance.onTokenRefresh.listen((String token) {
-    print('🔥🔥 FCM TOKEN REFRESHED: $token');
-  });
-
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-  final messaging = FirebaseMessaging.instance;
-
-  final settings = await messaging.requestPermission(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
-
-  await messaging.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
-
-  print('Permission: ${settings.authorizationStatus}');
-
-  await Future.delayed(const Duration(seconds: 2));
-
-  final apnsToken = await messaging.getAPNSToken();
-  print('APNs Token: $apnsToken');
-
-  if (apnsToken != null) {
+  if (!kIsWeb) {
     try {
-      final fcmToken = await messaging.getToken();
-      print('FCM Token: $fcmToken');
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        print('🔥🔥 FCM MESSAGE RECEIVED');
+        print('Message ID: ${message.messageId}');
+        print('Title: ${message.notification?.title}');
+        print('Body: ${message.notification?.body}');
+        print('Data: ${message.data}');
+      });
+
+      FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+        print('🔥🔥 FCM MESSAGE OPENED');
+        print('Message ID: ${message.messageId}');
+      });
+
+      FirebaseMessaging.instance.onTokenRefresh.listen((String token) {
+        print('🔥🔥 FCM TOKEN REFRESHED: $token');
+      });
+
+      FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+      final messaging = FirebaseMessaging.instance;
+
+      final settings = await messaging.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+
+      await messaging.setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+
+      print('Permission: ${settings.authorizationStatus}');
+
+      await Future.delayed(const Duration(seconds: 2));
+
+      final apnsToken = await messaging.getAPNSToken();
+      print('APNs Token: $apnsToken');
+
+      if (apnsToken != null) {
+        try {
+          final fcmToken = await messaging.getToken();
+          print('FCM Token: $fcmToken');
+        } catch (e) {
+          print('FCM error: $e');
+        }
+      }
     } catch (e) {
-      print('FCM error: $e');
+      print('Firebase initialization failed: $e');
     }
   }
 

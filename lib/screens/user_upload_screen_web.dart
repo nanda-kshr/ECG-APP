@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:html' as html;
 import 'dart:typed_data';
 import 'dart:async';
-import 'dart:ui' as ui; // ignore: unnecessary_import
+import 'dart:ui_web' as ui_web;
 import 'package:http_parser/http_parser.dart';
 import '../services/auth_service.dart';
 import 'package:http/http.dart' as http;
@@ -12,7 +12,9 @@ import '../services/task_service.dart';
 import 'create_patient_screen.dart';
 
 class UserUploadScreen extends StatefulWidget {
-  const UserUploadScreen({super.key});
+  final Patient? preSelectedPatient;
+
+  const UserUploadScreen({super.key, this.preSelectedPatient});
 
   @override
   State<UserUploadScreen> createState() => _UserUploadScreenState();
@@ -79,6 +81,10 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
   @override
   void initState() {
     super.initState();
+    if (widget.preSelectedPatient != null) {
+      _selectedPatient = widget.preSelectedPatient;
+      _patientSearchController.text = _selectedPatient!.displayInfo;
+    }
     _cameraViewId = 'camera-preview-${DateTime.now().millisecondsSinceEpoch}';
     _setupCameraElement();
   }
@@ -90,8 +96,7 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
       ..controls = false
       ..style.objectFit = 'cover'
       ..setAttribute('playsinline', 'true');
-    // ignore: undefined_prefixed_name
-    ui.platformViewRegistry.registerViewFactory(_cameraViewId, (int viewId) {
+    ui_web.platformViewRegistry.registerViewFactory(_cameraViewId, (int viewId) {
       return _video!;
     });
   }
