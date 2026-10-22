@@ -67,6 +67,9 @@ lib/
 ├── widgets/          # Reusable components
 └── main.dart        # App entry point
 ```
+## Project Objective
+
+To simplify ECG image sharing, doctor assignment, and medical review through a role-based digital platform.
 
 ## Dependencies
 
