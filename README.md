@@ -1,8 +1,8 @@
-# Simats Cardio
+# Simats Cardio #
 
 A comprehensive Flutter application for ECG image management with role-based access control.
 
-## Features
+## Features 
 
 ### 🔐 Authentication System
 - Role-based login (User, Admin, Doctor)
@@ -34,6 +34,7 @@ A comprehensive Flutter application for ECG image management with role-based acc
 | User | tech1 | password |
 | Admin | admin1 | password |
 | Doctor | doc1 | password |
+
 
 ## Getting Started
 
@@ -67,6 +68,9 @@ lib/
 ├── widgets/          # Reusable components
 └── main.dart        # App entry point
 ```
+## Project Objective
+
+To simplify ECG image sharing, doctor assignment, and medical review through a role-based digital platform.
 
 ## Dependencies
 
