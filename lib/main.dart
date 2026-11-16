@@ -6,6 +6,7 @@ import 'firebase_options.dart';
 import 'services/auth_service.dart';
 import 'services/push_service.dart';
 import 'services/task_service.dart';
+import 'services/version_service.dart';
 import 'screens/task_detail_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/user_dashboard.dart';
@@ -167,6 +168,13 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 1));
 
     if (mounted) {
+      // Check if backend requires a force update
+      final updateCheck = await VersionService.checkVersion();
+      if (mounted && updateCheck != null && updateCheck.needsUpdate) {
+        VersionService.showUpdateDialog(context, updateCheck);
+        return; // Halt navigation: do not continue without updating
+      }
+
       final isLoggedIn = await AuthService.isLoggedIn();
 
       // Wire push listeners to show in-app notifications and handle taps
